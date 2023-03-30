@@ -1,0 +1,8 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "bracketSameLine": true,
+  "vueIndentScriptAndStyle": true,
+  "endOfLine": "auto"
+}

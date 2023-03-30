@@ -1,0 +1,39 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true,
+    "vue/setup-compiler-macros": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:vue/vue3-recommended",
+    "plugin:prettier/recommended",
+    "./typings/.eslintrc-auto-import.json"
+  ],
+  "overrides": [],
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "vue", "prettier"],
+  "rules": {
+    "eqeqeq": [2, "always"],
+    "@typescript-eslint/no-unused-vars": 1,
+    "@typescript-eslint/no-empty-function": 1,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/ban-types": 1,
+    "vue/component-definition-name-casing": [2, "kebab-case"],
+    "vue/multi-word-component-names": 0,
+    "vue/require-default-prop": 0,
+    "vue/attributes-order": 0,
+    "vue/no-v-html": 0
+  }
+}
