@@ -25,6 +25,7 @@ function typeCheck(project: Project) {
 async function addSourceFiles(project: Project) {
   project.addSourceFileAtPath(resolve(projectRoot, 'typings/shims-vue.d.ts'))
   project.addSourceFileAtPath(resolve(projectRoot, 'typings/auto-imports.d.ts'))
+  project.addSourceFileAtPath(resolve(projectRoot, 'typings/components.d.ts'))
   const globSourceFile = '**/*.{js?(x),ts?(x),vue}'
   const filePaths = await glob([globSourceFile, '!ele-plus/**/*'], {
     cwd: pkgRoot,

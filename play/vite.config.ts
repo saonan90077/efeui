@@ -18,7 +18,8 @@ export default defineConfig({
       }
     }),
     Components({
-      resolvers: [ElementPlusResolver()]
+      resolvers: [ElementPlusResolver()],
+      dts: '../typings/components.d.ts'
     })
   ]
 })
