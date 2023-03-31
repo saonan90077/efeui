@@ -4,8 +4,8 @@ importers:
 
   .:
     specifiers:
-      '@ele-plus/components': workspace:*
-      '@ele-plus/utils': workspace:*
+      '@efe-plus/components': workspace:*
+      '@efe-plus/utils': workspace:*
       '@element-plus/icons-vue': ^2.1.0
       '@types/node': ^18.15.11
       '@typescript-eslint/eslint-plugin': ^5.57.0
@@ -23,8 +23,8 @@ importers:
       vite: ^4.2.0
       vue: ^3.2.47
     dependencies:
-      '@ele-plus/components': link:packages/components
-      '@ele-plus/utils': link:packages/utils
+      '@efe-plus/components': link:packages/components
+      '@efe-plus/utils': link:packages/utils
       '@element-plus/icons-vue': 2.1.0_vue@3.2.47
       element-plus: 2.3.1_vue@3.2.47
       lodash-es: 4.17.21
@@ -68,6 +68,12 @@ importers:
       ts-morph: 18.0.0
 
   packages/components:
+    specifiers: {}
+
+  packages/ele-plus:
+    specifiers: {}
+
+  packages/utils:
     specifiers: {}
 
   play:

@@ -1,5 +1,5 @@
 <template>
-  <EleCheckbox
+  <EfeCheckbox
     v-model="value"
     :options="[
       {
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { EleCheckbox } from '@ele-plus/components'
+  import { EfeCheckbox } from '@efe-plus/components'
 
   const value = ref([])
 </script>

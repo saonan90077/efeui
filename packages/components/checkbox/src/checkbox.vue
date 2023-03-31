@@ -23,7 +23,7 @@
 
 <script lang="ts">
   export default {
-    name: 'ele-checkbox'
+    name: 'efe-checkbox'
   }
 </script>
 <script lang="ts" setup>

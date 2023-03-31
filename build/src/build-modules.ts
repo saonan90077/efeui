@@ -1,4 +1,4 @@
-import { elePlusOutput, elePlusRoot, pkgRoot } from './path'
+import { efePlusOutput, efePlusRoot, pkgRoot } from './path'
 import glob from 'fast-glob'
 import vue from '@vitejs/plugin-vue'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
@@ -35,18 +35,18 @@ export const buildModules = async () => {
   await Promise.all([
     bundle.write({
       format: 'cjs',
-      dir: resolve(elePlusOutput, 'lib'),
+      dir: resolve(efePlusOutput, 'lib'),
       exports: 'named',
       preserveModules: true,
-      preserveModulesRoot: elePlusRoot,
+      preserveModulesRoot: efePlusRoot,
       sourcemap: true,
       entryFileNames: '[name].js'
     }),
     bundle.write({
       format: 'esm',
-      dir: resolve(elePlusOutput, 'es'),
+      dir: resolve(efePlusOutput, 'es'),
       preserveModules: true,
-      preserveModulesRoot: elePlusRoot,
+      preserveModulesRoot: efePlusRoot,
       sourcemap: true,
       entryFileNames: '[name].mjs'
     })

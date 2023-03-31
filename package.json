@@ -1,5 +1,5 @@
 {
-  "name": "ele-plus",
+  "name": "efe-plus",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,8 +13,8 @@
     "build": "pnpm run clean:dist && pnpm --filter @ele-plus/build build"
   },
   "dependencies": {
-    "@ele-plus/components": "workspace:*",
-    "@ele-plus/utils": "workspace:*",
+    "@efe-plus/components": "workspace:*",
+    "@efe-plus/utils": "workspace:*",
     "@element-plus/icons-vue": "^2.1.0",
     "element-plus": "^2.3.1",
     "lodash-es": "^4.17.21",

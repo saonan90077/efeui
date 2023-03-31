@@ -1,3 +1,3 @@
-import { EleCheckbox } from '@ele-plus/components'
+import { EfeCheckbox } from '@efe-plus/components'
 
-export default [EleCheckbox]
+export default [EfeCheckbox]

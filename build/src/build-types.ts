@@ -1,14 +1,14 @@
 import { src, dest } from 'gulp'
 import { dirname, relative, resolve } from 'path'
 import { Project, SourceFile } from 'ts-morph'
-import { elePlusOutput, elePlusRoot, pkgRoot, projectRoot } from './path'
+import { efePlusOutput, efePlusRoot, pkgRoot, projectRoot } from './path'
 import * as vueCompiler from 'vue/compiler-sfc'
 import glob from 'fast-glob'
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import chalk from 'chalk'
 
 const pathRewriter = (id: any) => {
-  id = id.replaceAll('@ele-plus/', 'ele-plus/es/')
+  id = id.replaceAll('@efe-plus/', 'efe-plus/es/')
   return id
 }
 
@@ -27,13 +27,13 @@ async function addSourceFiles(project: Project) {
   project.addSourceFileAtPath(resolve(projectRoot, 'typings/auto-imports.d.ts'))
   project.addSourceFileAtPath(resolve(projectRoot, 'typings/components.d.ts'))
   const globSourceFile = '**/*.{js?(x),ts?(x),vue}'
-  const filePaths = await glob([globSourceFile, '!ele-plus/**/*'], {
+  const filePaths = await glob([globSourceFile, '!efe-plus/**/*'], {
     cwd: pkgRoot,
     absolute: true,
     onlyFiles: true
   })
-  const elePlusPaths = await glob(globSourceFile, {
-    cwd: elePlusRoot,
+  const efePlusPaths = await glob(globSourceFile, {
+    cwd: efePlusRoot,
     onlyFiles: true
   })
   const sourceFiles: SourceFile[] = []
@@ -55,8 +55,8 @@ async function addSourceFiles(project: Project) {
         sourceFiles.push(sourceFile)
       }
     }),
-    ...elePlusPaths.map(async (file) => {
-      const content = await readFile(resolve(elePlusRoot, file), 'utf-8')
+    ...efePlusPaths.map(async (file) => {
+      const content = await readFile(resolve(efePlusRoot, file), 'utf-8')
       sourceFiles.push(
         project.createSourceFile(resolve(pkgRoot, file), content)
       )
@@ -69,7 +69,7 @@ const buildTypes = async () => {
     compilerOptions: {
       noEmit: false,
       emitDeclarationOnly: true,
-      outDir: resolve(elePlusOutput, 'types'),
+      outDir: resolve(efePlusOutput, 'types'),
       composite: true,
       preserveSymlinks: true
     },
@@ -106,8 +106,8 @@ const buildTypes = async () => {
 }
 
 const copyTypes = () => {
-  return src(resolve(elePlusOutput, 'types', 'packages/**/*')).pipe(
-    dest(resolve(elePlusOutput, 'es'))
+  return src(resolve(efePlusOutput, 'types', 'packages/**/*')).pipe(
+    dest(resolve(efePlusOutput, 'es'))
   )
 }
 
