@@ -12,6 +12,7 @@ import sidebar from './config/sidebar'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/efe-plus/',
   title: 'efe-plus',
   description: 'vue3 And Element Plus',
   head: [
