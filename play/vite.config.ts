@@ -14,7 +14,7 @@ export default defineConfig({
       dts: '../typings/auto-imports.d.ts',
       eslintrc: {
         enabled: true,
-        filepath: '../typings/.eslintrc-auto-import.json'
+        filepath: '../.eslintrc-auto-import.json'
       }
     }),
     Components({

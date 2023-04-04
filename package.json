@@ -5,12 +5,16 @@
   "type": "module",
   "workspaces": [
     "build",
+    "docs",
     "packages/*",
     "play"
   ],
   "scripts": {
     "clean:dist": "rimraf dist",
-    "build": "pnpm run clean:dist && pnpm --filter @ele-plus/build build"
+    "build": "pnpm run clean:dist && pnpm --filter @efe-plus/build build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@efe-plus/components": "workspace:*",

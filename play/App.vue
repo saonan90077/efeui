@@ -10,8 +10,7 @@
         label: 2,
         value: 2
       }
-    ]"
-    mode="button" />
+    ]" />
 </template>
 
 <script lang="ts" setup>

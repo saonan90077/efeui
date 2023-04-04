@@ -7,7 +7,7 @@ import esbuild from 'rollup-plugin-esbuild'
 import { rollup } from 'rollup'
 import { resolve } from 'path'
 
-export const buildModules = async () => {
+const buildModules = async () => {
   const inputPaths = await glob('**/*.{ts,vue}', {
     cwd: pkgRoot,
     onlyFiles: true,
@@ -52,3 +52,5 @@ export const buildModules = async () => {
     })
   ])
 }
+
+export { buildModules }
