@@ -1,4 +1,4 @@
-name: NodeJS with PNPM
+name: GitHub Pages
 
 on:
   push:
@@ -45,11 +45,13 @@ jobs:
         
       - name: docs:build
         run: pnpm run docs:build
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          external_repository: saonan90077/saonan90077.github.io
-          publish_branch: main
-          publish_dir: ./docs/.vitepress/dist
+      - name: Push To Pages
+        working-directory: ./docs/.vitepress/dist
+        run: |
+          git init
+          git checkout -b main
+          git add -A
+          git -c user.name='M_Events' -c user.email='1242942728@qq.com' commit -m 'Push To Pages'
+          git remote add origin https://github.com/saonan90077/saonan90077.github.io.git
+          git push origin main -f -q
         
