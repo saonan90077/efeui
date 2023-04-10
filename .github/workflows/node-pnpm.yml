@@ -45,6 +45,11 @@ jobs:
         
       - name: docs:build
         run: pnpm run docs:build
-      - name: ls
-        run: ls ./docs/.vitepress/dist
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          external_repository: saonan90077/saonan90077.github.io
+          publish_branch: main
+          publish_dir: ./docs/.vitepress/dist
         
