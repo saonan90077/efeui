@@ -43,3 +43,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
         
+      - name: docs:build
+        run: pnpm run docs:build
+      - name: ls
+        run: ls ./docs/dist
+        
