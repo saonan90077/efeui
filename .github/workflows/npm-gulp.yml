@@ -1,20 +1,27 @@
 name: NodeJS with PNPM
+
 on:
   push:
     branches: ['main']
   pull_request:
     branches: ['main']
+    
 jobs:
-  build:
+  docs-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.5.2
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
           node-version: 16
           
-      - name: docs:build
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+          
+      - name: Build
         run: |
           pnpm install
           pnpm run docs:build
