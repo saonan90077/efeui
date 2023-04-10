@@ -45,13 +45,11 @@ jobs:
         
       - name: docs:build
         run: pnpm run docs:build
-      - name: Push To Pages
-        working-directory: ./docs/.vitepress/dist
-        run: |
-          git init
-          git checkout -b main
-          git add -A
-          git -c user.name='M_Events' -c user.email='1242942728@qq.com' commit -m 'Push To Pages'
-          git remote add origin git@github.com:saonan90077/saonan90077.github.io.git
-          git push origin main -f -q
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.PERSONAL_TOKEN }}
+          external_repository: saonan90077/saonan90077.github.io
+          publish_branch: main
+          publish_dir: ./docs/.vitepress/dist
         
