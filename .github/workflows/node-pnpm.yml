@@ -46,5 +46,5 @@ jobs:
       - name: docs:build
         run: pnpm run docs:build
       - name: ls
-        run: ls ./docs/dist
+        run: ls ./docs/.vitepress/dist
         
