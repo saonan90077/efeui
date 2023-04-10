@@ -52,6 +52,6 @@ jobs:
           git checkout -b main
           git add -A
           git -c user.name='M_Events' -c user.email='1242942728@qq.com' commit -m 'Push To Pages'
-          git remote add origin https://github.com/saonan90077/saonan90077.github.io.git
+          git remote add origin git@github.com:saonan90077/saonan90077.github.io.git
           git push origin main -f -q
         
