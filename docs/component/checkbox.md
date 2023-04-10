@@ -40,14 +40,13 @@ demo-preview=../examples/checkbox/temp.vue
 
 ## Props
 
-| 属性                  | 说明                               | 类型                | 可选值               | 默认值    |
-| --------------------- | ---------------------------------- | ------------------- | -------------------- | --------- |
-| model-value / v-model | 选中项绑定值                       | string[] / number[] | -                    | -         |
-| mode                  | 指定按钮样式                       | string              | 'default' / 'button' | 'default' |
-| border                | 是否显示边框                       | boolean             | -                    | false     |
-| label-key             | 指定选项标签为选项对象的某个属性值 | string              | -                    | 'label'   |
-| value-key             | 指定选项的值为选项对象的某个属性值 | string              | -                    | 'value'   |
-| options               | 选项配置                           | OptionItem[]        | -                    | -         |
+| 属性                  | 说明                               | 类型                 | 可选值               | 默认值    |
+| --------------------- | ---------------------------------- | -------------------- | -------------------- | --------- |
+| model-value / v-model | 选中项绑定值                       | (string \| number)[] | -                    | -         |
+| mode                  | 指定按钮样式                       | string               | 'default' / 'button' | 'default' |
+| label-key             | 指定选项标签为选项对象的某个属性值 | string               | -                    | 'label'   |
+| value-key             | 指定选项的值为选项对象的某个属性值 | string               | -                    | 'value'   |
+| options               | 选项配置                           | OptionItem[]         | -                    | -         |
 
 ## OptionItem Props
 
@@ -59,6 +58,6 @@ demo-preview=../examples/checkbox/temp.vue
 
 ## Slots
 
-| 插槽名   | 说明              |
-| -------- | ----------------- |
-| opt-temp | Checkbox 默认插槽 |
+| 插槽名   | 说明           |
+| -------- | -------------- |
+| opt-temp | 自定义模板插槽 |

@@ -2,6 +2,7 @@
   "name": "efe-plus",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://saonan90077.github.io/efe-plus",
   "type": "module",
   "workspaces": [
     "build",
