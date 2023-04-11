@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref, computed } from 'vue'
   const checkValue = ref()
   const options = computed(() => [
     {

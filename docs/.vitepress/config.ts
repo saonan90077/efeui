@@ -1,12 +1,8 @@
 import { defineConfig } from 'vitepress'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import {
   containerPreview,
   componentPreview
 } from '@vitepress-demo-preview/plugin'
-import { resolve } from 'path'
 import nav from './config/nav'
 import sidebar from './config/sidebar'
 
@@ -28,26 +24,6 @@ export default defineConfig({
     config(md) {
       md.use(containerPreview)
       md.use(componentPreview)
-    }
-  },
-  vite: {
-    plugins: [
-      AutoImport({
-        resolvers: [ElementPlusResolver()],
-        imports: ['vue'],
-        dts: resolve(__dirname, '../../typings/auto-imports.d.ts'),
-        eslintrc: {
-          enabled: true,
-          filepath: resolve(__dirname, '../../.eslintrc-auto-import.json')
-        }
-      }),
-      Components({
-        resolvers: [ElementPlusResolver()],
-        dts: resolve(__dirname, '../../typings/components.d.ts')
-      })
-    ],
-    ssr: {
-      format: 'cjs'
     }
   },
   themeConfig: {

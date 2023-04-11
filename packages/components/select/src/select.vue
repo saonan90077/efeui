@@ -1,14 +1,14 @@
 <template>
-  <el-select v-model="modelValue" v-bind="$attrs">
-    <el-option
+  <ElSelect v-model="modelValue" v-bind="$attrs">
+    <ElOption
       v-for="item in options"
       :key="item[valueKey]"
       :label="item[labelKey]"
       :value="item[valueKey]"
       :disabled="item.disabled">
       <slot name="opt-temp" :opt="item"></slot>
-    </el-option>
-  </el-select>
+    </ElOption>
+  </ElSelect>
 </template>
 
 <script lang="ts">
@@ -17,6 +17,8 @@
   }
 </script>
 <script lang="ts" setup>
+  import { computed } from 'vue'
+  import { ElSelect, ElOption } from 'element-plus'
   import { selectProps } from './select'
 
   const props = defineProps(selectProps)

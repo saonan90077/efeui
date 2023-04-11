@@ -1,24 +1,14 @@
 <template>
-  <el-checkbox-group v-model="modelValue" v-bind="$attrs">
-    <template v-if="mode === 'button'">
-      <el-checkbox-button
-        v-for="item in options"
-        :key="item[valueKey]"
-        :label="item[valueKey]"
-        :disabled="item.disabled">
-        <slot name="opt-temp" :opt-conf="item">{{ item[labelKey] }}</slot>
-      </el-checkbox-button>
-    </template>
-    <template v-else>
-      <el-checkbox
-        v-for="item in options"
-        :key="item[valueKey]"
-        :label="item[valueKey]"
-        :disabled="item.disabled">
-        <slot name="opt-temp" :opt="item">{{ item[labelKey] }}</slot>
-      </el-checkbox>
-    </template>
-  </el-checkbox-group>
+  <ElCheckboxGroup v-model="modelValue" v-bind="$attrs">
+    <component
+      v-for="item in options"
+      :is="view"
+      :key="item[valueKey]"
+      :label="item[valueKey]"
+      :disabled="item.disabled">
+      <slot name="opt-temp" :opt-conf="item">{{ item[labelKey] }}</slot>
+    </component>
+  </ElCheckboxGroup>
 </template>
 
 <script lang="ts">
@@ -27,6 +17,8 @@
   }
 </script>
 <script lang="ts" setup>
+  import { computed } from 'vue'
+  import { ElCheckboxGroup, ElCheckbox, ElCheckboxButton } from 'element-plus'
   import { checkboxProps, checkboxEmits } from './checkbox'
 
   const props = defineProps(checkboxProps)
@@ -41,4 +33,8 @@
       emit('update:model-value', val)
     }
   })
+
+  const view = computed(() =>
+    props.mode === 'button' ? ElCheckboxButton : ElCheckbox
+  )
 </script>
