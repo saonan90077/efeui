@@ -7,5 +7,5 @@ export const buildRoot = resolve(projectRoot, 'dist')
 export const efePlusOutput = resolve(buildRoot, 'efe-plus')
 /** 构建根路径 /packages */
 export const pkgRoot = resolve(projectRoot, 'packages')
-/** 构建入口 /packages/gen-plus */
+/** 构建入口 /packages/efe-plus */
 export const efePlusRoot = resolve(pkgRoot, 'efe-plus')

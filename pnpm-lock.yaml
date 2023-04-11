@@ -81,7 +81,7 @@ importers:
   packages/components:
     specifiers: {}
 
-  packages/ele-plus:
+  packages/efe-plus:
     specifiers: {}
 
   packages/utils:
