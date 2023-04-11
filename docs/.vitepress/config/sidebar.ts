@@ -6,6 +6,10 @@ function getComponentSidebar() {
         {
           text: 'Checkbox 多选框',
           link: '/component/checkbox'
+        },
+        {
+          text: 'Select 选择器',
+          link: '/component/select'
         }
       ]
     }

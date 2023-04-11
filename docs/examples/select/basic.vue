@@ -1,13 +1,9 @@
 <template>
-  <efe-checkbox v-model="checkList" :options="options">
-    <template #opt-temp="{ opt }">
-      {{ opt.label }}++++{{ opt.value }}
-    </template>
-  </efe-checkbox>
+  <efe-select v-model="checkValue" :options="options"> </efe-select>
 </template>
 
 <script lang="ts" setup>
-  const checkList = ref(['1', '5'])
+  const checkValue = ref()
   const options = computed(() => [
     {
       label: 'Option A',

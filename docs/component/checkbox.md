@@ -56,7 +56,7 @@ demo-preview=../examples/checkbox/temp.vue
 | value    | 选项的值       | string/number | -      | -      |
 | disabled | 是否禁用该选项 | boolean       | -      | -      |
 
-## Slots
+## Option Slots
 
 | 插槽名   | 说明           |
 | -------- | -------------- |

@@ -6,7 +6,7 @@
         :key="item[valueKey]"
         :label="item[valueKey]"
         :disabled="item.disabled">
-        <slot name="opt-temp" :option="item">{{ item[labelKey] }}</slot>
+        <slot name="opt-temp" :opt-conf="item">{{ item[labelKey] }}</slot>
       </el-checkbox-button>
     </template>
     <template v-else>
@@ -15,7 +15,7 @@
         :key="item[valueKey]"
         :label="item[valueKey]"
         :disabled="item.disabled">
-        <slot name="opt-temp" :option="item">{{ item[labelKey] }}</slot>
+        <slot name="opt-temp" :opt="item">{{ item[labelKey] }}</slot>
       </el-checkbox>
     </template>
   </el-checkbox-group>
