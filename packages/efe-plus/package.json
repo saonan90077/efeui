@@ -2,15 +2,6 @@
   "name": "efe-plus",
   "version": "1.0.0-beta.0",
   "description": "A Component Library for Vue 3",
-  "main": "lib/index.js",
-  "module": "es/index.mjs",
-  "types": "es/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./es/index.mjs",
-      "require": "./lib/index.js"
-    }
-  },
   "keywords": [
     "element-plus",
     "element",
@@ -20,6 +11,25 @@
     "vue"
   ],
   "license": "MIT",
+  "main": "lib/index.js",
+  "module": "es/index.mjs",
+  "types": "es/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.mjs",
+      "require": "./lib/index.js"
+    },
+    "./es": "./es/index.mjs",
+    "./lib": "./lib/index.js",
+    "./es/*.mjs": "./es/*.mjs",
+    "./es/*": "./es/*.mjs",
+    "./lib/*.js": "./lib/*.js",
+    "./lib/*": "./lib/*.js",
+    "./*": "./*"
+  },
+  "unpkg": "dist/index.full.js",
+  "jsdelivr": "dist/index.full.js",
   "publishConfig": {
     "access": "public"
   },
