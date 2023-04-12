@@ -1,7 +1,7 @@
 <template>
   <efe-checkbox v-model="checkList" :options="options">
-    <template #opt-temp="{ opt }">
-      {{ opt.label }}++++{{ opt.value }}
+    <template #opt-temp="{ optConf }">
+      {{ optConf.label }}++++{{ optConf.value }}
     </template>
   </efe-checkbox>
 </template>
