@@ -1,4 +1,4 @@
-name: Changesets
+name: GitHub Pages
 
 on:
   push:
@@ -6,13 +6,8 @@ on:
   pull_request:
     branches: ['main']
     
-env:
-  CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
-    
 jobs:
-  version:
-    timeout-minutes: 15
+  cache-and-install:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,20 +45,6 @@ jobs:
         
       - name: docs:build
         run: pnpm run docs:build
-        
-      - name: build:efe-plus
-        run: pnpm run build:efe-plus
-        
-      - name: create and publish versions
-        uses: changesets/action@v1
-        with:
-          version: pnpm ci:version
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: pnpm publish:efe-plus
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
