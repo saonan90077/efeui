@@ -1,14 +1,15 @@
 import type { App } from 'vue'
-import fullComponents from './full-components'
-export * from '@efe-plus/components'
+import { EfeSelect, EfeCheckbox } from '@efe-plus/components'
 export * from '@efe-plus/utils'
 
+const components = [EfeSelect, EfeCheckbox]
+
 const install = (app: App) => {
-  fullComponents.forEach((comp) => app.use(comp))
+  components.forEach((comp) => app.use(comp))
 }
 
 const installer = {
   install
 }
 
-export default installer
+export { installer as default, EfeSelect, EfeCheckbox }
