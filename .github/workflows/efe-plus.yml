@@ -1,4 +1,4 @@
-name: GitHub Pages
+name: gh pages
 
 on:
   push:
@@ -45,12 +45,6 @@ jobs:
 
       - name: setup docs
         run: pnpm run docs:build
-
-      - name: setup efeplus
-        run: pnpm run build:efe-plus
-
-      - name: publish efeplus
-        run: pnpm run publish:efe-plus
 
       - name: gh pages
         uses: peaceiris/actions-gh-pages@v3
