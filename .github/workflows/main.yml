@@ -1,5 +1,3 @@
-name: setup docs
-
 on:
   push:
     branches: ['main']
@@ -56,9 +54,9 @@ jobs:
           personal_token: ${{ secrets.PERSONAL_TOKEN }}
           external_repository: saonan90077/saonan90077.github.io
           publish_branch: main
-          publish_dir: ./docs/.vitepress/dist
+          publish_dir: docs/.vitepress/dist
           
       - name: publish library
-        run: pnpm run publish:efe-plus
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          pnpm run publish:efe-plus
