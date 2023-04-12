@@ -17,7 +17,8 @@ jobs:
       - name: install node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: '16'
+          cache: 'pnpm'
         
       - name: install pnpm
         id: pnpm-install
