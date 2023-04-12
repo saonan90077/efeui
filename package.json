@@ -15,8 +15,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "clean:dist": "rimraf dist",
-    "build:efe-plus": "pnpm run clean:dist && pnpm --filter @efe-plus/build build",
-    "publish:efe-plus": "pnpm publish ./dist/efe-plus"
+    "build:efe-plus": "pnpm run clean:dist && pnpm --filter @efe-plus/build build"
   },
   "dependencies": {
     "@efe-plus/components": "workspace:*",
