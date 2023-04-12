@@ -51,6 +51,9 @@ jobs:
       - name: docs:build
         run: pnpm run docs:build
         
+      - name: build:efe-plus
+        run: pnpm run build:efe-plus
+        
       - name: create and publish versions
         uses: changesets/action@v1
         with:
