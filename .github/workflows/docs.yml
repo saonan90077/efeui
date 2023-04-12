@@ -14,11 +14,7 @@ jobs:
       - name: checkout code repository
         uses: actions/checkout@v3
         
-      - name: install node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'pnpm'
+      - uses: pnpm/action-setup@v2
         
       - name: install pnpm
         id: pnpm-install
@@ -41,6 +37,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
             
+      - name: install node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'pnpm'
+      
       - name: install dependencies
         run: pnpm install
 
