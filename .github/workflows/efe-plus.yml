@@ -61,6 +61,8 @@ jobs:
           commit: "chore: update versions"
           title: "chore: update versions"
           publish: pnpm publish:efe-plus
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
