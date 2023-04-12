@@ -46,6 +46,9 @@ jobs:
 
       - name: setup docs
         run: pnpm run docs:build
+        
+      - name: setup library
+        run: pnpm run build:efe-plus
 
       - name: gh pages
         uses: peaceiris/actions-gh-pages@v3
@@ -54,3 +57,8 @@ jobs:
           external_repository: saonan90077/saonan90077.github.io
           publish_branch: main
           publish_dir: ./docs/.vitepress/dist
+          
+      - name: publish library
+        run: pnpm run publish:efe-plus
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
