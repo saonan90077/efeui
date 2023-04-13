@@ -3,7 +3,7 @@ import type Select from './select.vue'
 
 export interface SelectOption {
   label?: string | number
-  value?: string | number
+  value?: string | number | boolean
   disabled?: boolean
   [propName: string]: any
 }

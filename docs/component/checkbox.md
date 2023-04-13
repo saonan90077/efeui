@@ -30,9 +30,9 @@
 | mode                  | 指定按钮样式                       | string               | 'default' / 'button' | 'default' |
 | label-key             | 指定选项标签为选项对象的某个属性值 | string               | -                    | 'label'   |
 | value-key             | 指定选项的值为选项对象的某个属性值 | string               | -                    | 'value'   |
-| options               | 选项配置                           | OptionItem[]         | -                    | -         |
+| options               | 选项配置                           | CheckboxOption[]     | -                    | -         |
 
-## OptionItem Props
+## CheckboxOption Props
 
 | 属性     | 说明           | 类型          | 可选值 | 默认值 |
 | -------- | -------------- | ------------- | ------ | ------ |

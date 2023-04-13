@@ -1,0 +1,16 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@efe-plus/build": "1.0.0",
+    "@efe-plus/docs": "1.0.0",
+    "@efe-plus/components": "1.0.1-alpha.0",
+    "efe-plus": "1.0.0-alpha.2",
+    "@efe-plus/utils": "1.0.1-alpha.0",
+    "@efe-plus/play": "1.0.0"
+  },
+  "changesets": [
+    "gorgeous-fans-end",
+    "slimy-suns-smile"
+  ]
+}
