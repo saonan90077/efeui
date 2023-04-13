@@ -7,10 +7,12 @@
     "@efe-plus/components": "1.0.1-alpha.1",
     "efe-plus": "1.0.0-alpha.3",
     "@efe-plus/utils": "1.0.1-alpha.0",
-    "@efe-plus/play": "1.0.0"
+    "@efe-plus/play": "1.0.0",
+    "@efe-plus/theme-chalk": "1.0.0"
   },
   "changesets": [
     "gorgeous-fans-end",
+    "many-planes-deny",
     "polite-eggs-tan",
     "slimy-suns-smile"
   ]

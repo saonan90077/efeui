@@ -8,6 +8,7 @@ import { mkdir, readFile, writeFile } from 'fs/promises'
 import chalk from 'chalk'
 
 const pathRewriter = (id: any) => {
+  id = id.replaceAll('@efe-plus/theme-chalk', 'efe-plus/theme-chalk')
   id = id.replaceAll('@efe-plus/', 'efe-plus/es/')
   return id
 }
@@ -24,14 +25,15 @@ function typeCheck(project: Project) {
 
 async function addSourceFiles(project: Project) {
   project.addSourceFileAtPath(resolve(projectRoot, 'typings/shims-vue.d.ts'))
-  project.addSourceFileAtPath(resolve(projectRoot, 'typings/auto-imports.d.ts'))
-  project.addSourceFileAtPath(resolve(projectRoot, 'typings/components.d.ts'))
   const globSourceFile = '**/*.{js?(x),ts?(x),vue}'
-  const filePaths = await glob([globSourceFile, '!efe-plus/**/*'], {
-    cwd: pkgRoot,
-    absolute: true,
-    onlyFiles: true
-  })
+  const filePaths = await glob(
+    [globSourceFile, '!efe-plus/**/*', '!theme-chalk/**/*'],
+    {
+      cwd: pkgRoot,
+      absolute: true,
+      onlyFiles: true
+    }
+  )
   const efePlusPaths = await glob(globSourceFile, {
     cwd: efePlusRoot,
     onlyFiles: true

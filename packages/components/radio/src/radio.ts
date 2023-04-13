@@ -32,12 +32,12 @@ export const radioProps = {
     default: 'default'
   }
 }
-export type RadioProps = ExtractPropTypes<typeof radioProps>
 
 export const radioEmits = {
   'update:model-value': (value: RadioValueType) =>
     isString(value) || isNumber(value) || isBoolean(value)
 }
-export type CheckboxEmits = typeof radioEmits
 
+export type RadioProps = ExtractPropTypes<typeof radioProps>
+export type CheckboxEmits = typeof radioEmits
 export type RadioInstance = InstanceType<typeof Radio>

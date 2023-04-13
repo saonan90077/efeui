@@ -14,6 +14,10 @@ function getComponentSidebar() {
         {
           text: 'Radio 单选框',
           link: '/component/radio'
+        },
+        {
+          text: 'InputRange 范围输入框',
+          link: '/component/input-range'
         }
       ]
     }

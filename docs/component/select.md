@@ -16,20 +16,20 @@
 
 ## Props
 
-| 属性                  | 说明                               | 类型                 | 可选值 | 默认值  |
-| --------------------- | ---------------------------------- | -------------------- | ------ | ------- |
-| model-value / v-model | 选中项绑定值                       | (string \| number)[] | -      | -       |
-| label-key             | 指定选项标签为选项对象的某个属性值 | string               | -      | 'label' |
-| value-key             | 指定选项的值为选项对象的某个属性值 | string               | -      | 'value' |
-| options               | 选项配置                           | SelectOption[]       | -      | -       |
+| 属性                  | 说明                               | 类型                                      | 可选值 | 默认值  |
+| --------------------- | ---------------------------------- | ----------------------------------------- | ------ | ------- |
+| model-value / v-model | 选中项绑定值                       | array / string / number / boolean / objec | -      | -       |
+| label-key             | 指定选项标签为选项对象的某个属性值 | string                                    | -      | 'label' |
+| value-key             | 指定选项的值为选项对象的某个属性值 | string                                    | -      | 'value' |
+| options               | 选项配置                           | SelectOption[]                            | -      | -       |
 
 ## SelectOption Props
 
-| 属性     | 说明           | 类型                  | 可选值 | 默认值 |
-| -------- | -------------- | --------------------- | ------ | ------ |
-| label    | 选项的标签     | string/number         | -      | -      |
-| value    | 选项的值       | string/number/boolean | -      | -      |
-| disabled | 是否禁用该选项 | boolean               | -      | -      |
+| 属性     | 说明           | 类型                     | 可选值 | 默认值 |
+| -------- | -------------- | ------------------------ | ------ | ------ |
+| label    | 选项的标签     | string / number          | -      | -      |
+| value    | 选项的值       | string / number/ boolean | -      | -      |
+| disabled | 是否禁用该选项 | boolean                  | -      | -      |
 
 ## Slots
 

@@ -25,6 +25,6 @@ export const selectProps = {
     default: 'value'
   }
 }
-export type SelectProps = ExtractPropTypes<typeof selectProps>
 
+export type SelectProps = ExtractPropTypes<typeof selectProps>
 export type SelectInstance = InstanceType<typeof Select>

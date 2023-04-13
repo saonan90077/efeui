@@ -1,5 +1,11 @@
 # efe-plus
 
+## 1.0.0-alpha.5
+
+### Patch Changes
+
+- 新增 InputRange 范围输入框
+
 ## 1.0.0-alpha.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @efe-plus/utils
 
+## 1.0.1-alpha.2
+
+### Patch Changes
+
+- 新增 InputRange 范围输入框
+
 ## 1.0.1-alpha.1
 
 ### Patch Changes

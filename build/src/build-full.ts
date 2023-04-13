@@ -10,6 +10,18 @@ const buildBundle = async (minify: boolean) => {
   const bundle = await rollup({
     input: resolve(efePlusRoot, 'index.ts'),
     plugins: [
+      {
+        name: 'theme-chalk-alias',
+        resolveId(id) {
+          if (!id.startsWith('@efe-plus/theme-chalk')) {
+            return
+          }
+          return {
+            id: id.replaceAll('@efe-plus/theme-chalk', 'efe-plus/theme-chalk'),
+            external: 'absolute'
+          }
+        }
+      },
       nodeResolve({
         extensions: ['.ts', '.vue']
       }),

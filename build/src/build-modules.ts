@@ -7,15 +7,36 @@ import esbuild from 'rollup-plugin-esbuild'
 import { rollup } from 'rollup'
 import { resolve } from 'path'
 
+const excludeFiles = (files: string[]) => {
+  const excludes = ['theme-chalk']
+  return files.filter(
+    (path) => !excludes.some((exclude) => path.includes(exclude))
+  )
+}
+
 const buildModules = async () => {
-  const inputPaths = await glob('**/*.{ts,vue}', {
-    cwd: pkgRoot,
-    onlyFiles: true,
-    absolute: true
-  })
+  const inputPaths = excludeFiles(
+    await glob(['**/*.{ts,vue}'], {
+      cwd: pkgRoot,
+      onlyFiles: true,
+      absolute: true
+    })
+  )
   const bundle = await rollup({
     input: inputPaths,
     plugins: [
+      {
+        name: 'theme-chalk-alias',
+        resolveId(id) {
+          if (!id.startsWith('@efe-plus/theme-chalk')) {
+            return
+          }
+          return {
+            id: id.replaceAll('@efe-plus/theme-chalk', 'efe-plus/theme-chalk'),
+            external: 'absolute'
+          }
+        }
+      },
       nodeResolve({
         extensions: ['.ts', '.vue']
       }),
