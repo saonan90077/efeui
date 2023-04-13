@@ -1,8 +1,5 @@
 import { defineConfig } from 'vitepress'
-import {
-  containerPreview,
-  componentPreview
-} from '@vitepress-demo-preview/plugin'
+import { applyPlugins } from '@ruabick/md-demo-plugins'
 import nav from './config/nav'
 import sidebar from './config/sidebar'
 
@@ -22,8 +19,7 @@ export default defineConfig({
   ],
   markdown: {
     config(md) {
-      md.use(containerPreview)
-      md.use(componentPreview)
+      applyPlugins(md)
     }
   },
   themeConfig: {

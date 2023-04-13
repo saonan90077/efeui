@@ -4,39 +4,23 @@
 
 ## 基础用法
 
-:::preview 标题 || 适用于多个勾选框绑定到同一个数组的情景，通过是否勾选来表示这一组选项中选中的项。
-
-demo-preview=../examples/checkbox/basic.vue
-
-:::
+<demo src="../examples/checkbox/basic.vue"></demo>
 
 ## 按钮样式
 
 设置 `mode` 属性为 `button`
 
-:::preview 标题 || 按钮样式的多选组合
-
-demo-preview=../examples/checkbox/button.vue
-
-:::
+<demo src="../examples/checkbox/button.vue"></demo>
 
 ## 指定选项的值或者标签
 
 设置`label-key` `value-key`属性
 
-:::preview 标题 || 指定选项的值或者选项标签为选项对象的某个属性值
-
-demo-preview=../examples/checkbox/label-key.vue
-
-:::
+<demo src="../examples/checkbox/label-key.vue" desc="指定选项的值或者选项标签为选项对象的某个属性值"></demo>
 
 ## 自定义模板
 
-:::preview 标题 || 你可以自定义如何来渲染每一个选项。
-
-demo-preview=../examples/checkbox/temp.vue
-
-:::
+<demo src="../examples/checkbox/temp.vue"></demo>
 
 ## Props
 
