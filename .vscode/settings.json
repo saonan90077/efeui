@@ -1,6 +1,5 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "volar.inlayHints.eventArgumentInInlineHandlers": false,
-  "json.format.enable": false
+  "volar.inlayHints.eventArgumentInInlineHandlers": false
 }
