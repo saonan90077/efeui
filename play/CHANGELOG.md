@@ -1,5 +1,11 @@
 # @efe-plus/play
 
+## 1.0.1-alpha.1
+
+### Patch Changes
+
+- @efe-plus/components 添加 style
+
 ## 1.0.1-alpha.0
 
 ### Patch Changes

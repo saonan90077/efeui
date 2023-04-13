@@ -1,5 +1,11 @@
 # efe-plus
 
+## 1.0.0-alpha.6
+
+### Patch Changes
+
+- @efe-plus/components 添加 style
+
 ## 1.0.0-alpha.5
 
 ### Patch Changes

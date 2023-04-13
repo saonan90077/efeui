@@ -1,5 +1,17 @@
 # @efe-plus/components
 
+## 1.0.1-alpha.5
+
+### Patch Changes
+
+- @efe-plus/components 添加 style
+
+## 1.0.1-alpha.4
+
+### Patch Changes
+
+- 添加 style
+
 ## 1.0.1-alpha.3
 
 ### Patch Changes
