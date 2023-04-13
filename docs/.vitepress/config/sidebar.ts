@@ -10,6 +10,10 @@ function getComponentSidebar() {
         {
           text: 'Select 选择器',
           link: '/component/select'
+        },
+        {
+          text: 'Radio 单选框',
+          link: '/component/radio'
         }
       ]
     }

@@ -1,14 +1,10 @@
 <template>
-  <efe-select v-model="checkValue" :options="options">
-    <template #opt-temp="{ optConf }"
-      >{{ optConf.label }}-----{{ optConf.value }}</template
-    >
-  </efe-select>
+  <efe-radio v-model="checkList" :options="options"> </efe-radio>
 </template>
 
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
-  const checkValue = ref()
+  const checkList = ref('1')
   const options = computed(() => [
     {
       label: 'Option A',

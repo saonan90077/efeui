@@ -1,5 +1,11 @@
 # efe-plus
 
+## 1.0.0-alpha.4
+
+### Patch Changes
+
+- 新增 radio 组件
+
 ## 1.0.0-alpha.3
 
 ### Patch Changes

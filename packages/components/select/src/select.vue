@@ -6,7 +6,7 @@
       :label="item[labelKey]"
       :value="item[valueKey]"
       :disabled="item.disabled">
-      <slot name="opt-temp" :opt="item"></slot>
+      <slot name="opt-temp" :opt-conf="item"></slot>
     </ElOption>
   </ElSelect>
 </template>
@@ -22,14 +22,14 @@
   import { selectProps } from './select'
 
   const props = defineProps(selectProps)
-  const emit = defineEmits(['update:modelValue'])
+  const emit = defineEmits(['update:model-value'])
 
   const modelValue = computed({
     get() {
       return props.modelValue
     },
     set(val) {
-      emit('update:modelValue', val)
+      emit('update:model-value', val)
     }
   })
 </script>

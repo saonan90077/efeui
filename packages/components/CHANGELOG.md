@@ -1,5 +1,11 @@
 # @efe-plus/components
 
+## 1.0.1-alpha.2
+
+### Patch Changes
+
+- 新增 radio 组件
+
 ## 1.0.1-alpha.1
 
 ### Patch Changes
