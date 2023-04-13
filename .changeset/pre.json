@@ -1,0 +1,15 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@efe-plus/build": "1.0.0",
+    "@efe-plus/docs": "1.0.0",
+    "@efe-plus/components": "1.0.0",
+    "efe-plus": "1.0.0-alpha.1",
+    "@efe-plus/utils": "1.0.0",
+    "@efe-plus/play": "1.0.0"
+  },
+  "changesets": [
+    "cold-knives-rule"
+  ]
+}

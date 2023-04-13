@@ -1,6 +1,8 @@
 import type { ExtractPropTypes, PropType } from 'vue'
 import type Select from './select.vue'
-
+/**
+ * 选项配置
+ */
 export interface SelectOption {
   label?: string | number
   value?: string | number
