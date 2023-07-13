@@ -6,22 +6,31 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig(() => {
   return {
     plugins: [vue(), vueJsx()],
+    esbuild: {
+      drop: ['console', 'debugger'],
+    },
     build: {
-      sourcemap: true,
       rollupOptions: {
-        external: ['vue', 'element-plus', '@vueuse/core'],
+        external: [
+          'vue',
+          'element-plus',
+          '@element-plus/icons-vue',
+          '@vueuse/core',
+        ],
         output: {
           globals: {
             vue: 'Vue',
             'element-plus': 'ElementPlus',
+            '@element-plus/icons-vue': 'ElementPlusIconsVue',
             '@vueuse/core': 'VueUse',
           },
+          exports: 'named',
         },
       },
       lib: {
         entry: './resources/index.ts',
         name: 'Efeui',
-        fileName: 'dist/index',
+        fileName: 'index.full',
       },
     },
   }

@@ -1,19 +1,19 @@
 import { defineComponent } from 'vue'
-import { ElCheckboxGroup, ElCheckbox, ElCheckboxButton } from 'element-plus'
+import { ElRadioGroup, ElRadio, ElRadioButton } from 'element-plus'
 import { useVModel } from '@vueuse/core'
-import { checkboxProps, CheckboxSlots } from './checkbox-types'
+import { radioProps, RadioSlots } from './radio-types'
 
-const Checkbox = defineComponent({
-  name: 'efe-checkbox',
-  props: checkboxProps,
-  slots: Object as CheckboxSlots,
+const Radio = defineComponent({
+  name: 'efe-radio',
+  props: radioProps,
+  slots: Object as RadioSlots,
   emits: ['update:modelValue'],
   setup(props, { emit, attrs, slots }) {
     const modelValue = useVModel(props, 'modelValue', emit)
 
     const renderChildren = () => {
       const { options, mode, valueKey, labelKey } = props
-      const OptionComp = mode === 'button' ? ElCheckboxButton : ElCheckbox
+      const OptionComp = mode === 'button' ? ElRadioButton : ElRadio
       return options?.map((opt, optIndex) => (
         <OptionComp
           key={opt[valueKey]}
@@ -26,16 +26,16 @@ const Checkbox = defineComponent({
     }
 
     return () => {
-      console.log('render: ', 'efe-checkbox')
+      console.log('render: ', 'efe-radio')
       const children = renderChildren()
 
       return (
-        <ElCheckboxGroup v-model={modelValue.value} {...attrs}>
+        <ElRadioGroup v-model={modelValue.value} {...attrs}>
           {children}
-        </ElCheckboxGroup>
+        </ElRadioGroup>
       )
     }
   },
 })
 
-export default Checkbox
+export default Radio

@@ -1,0 +1,33 @@
+.form-group-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  &__title {
+    padding-left: 12px;
+    font-weight: 500;
+    color: #000000d9;
+    font-size: 16px;
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      margin-top: -10px;
+      width: 4px;
+      height: 20px;
+      background: #198fe0;
+      border-radius: 2px;
+    }
+  }
+}
+.form-group-body {
+  .el-icon.el-tooltip__trigger {
+    align-self: center;
+  }
+  .form-item__extra {
+    color: #00000073;
+    line-height: normal;
+    flex-basis: 100%;
+  }
+}
