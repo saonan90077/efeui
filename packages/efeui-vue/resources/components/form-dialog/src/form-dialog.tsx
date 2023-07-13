@@ -41,6 +41,7 @@ const FormDialog = defineComponent({
 
     return () => {
       const {
+        model,
         labelWidth,
         labelSuffix,
         labelPosition,
@@ -51,6 +52,20 @@ const FormDialog = defineComponent({
         cancelText,
         okText,
       } = props
+
+      const dialogProps = {
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+        onClosed: handleClose,
+        ...attrs,
+      }
+
+      const formProps = {
+        labelWidth,
+        labelSuffix,
+        labelPosition,
+        disabled,
+      }
 
       const renderFooter = () => {
         return (
@@ -79,12 +94,7 @@ const FormDialog = defineComponent({
             'title-append': titleAppend,
             footer: footer || (showCancel || showOk ? renderFooter : null),
           }}
-          {...{
-            closeOnClickModal: false,
-            closeOnPressEscape: false,
-            onClosed: handleClose,
-            ...attrs,
-          }}>
+          {...dialogProps}>
           <EfeForm
             ref={$formRef}
             v-slots={{
@@ -92,14 +102,9 @@ const FormDialog = defineComponent({
               // ! [添加slotStable选项配置优化子组件的更新](https://github.com/vuejs/babel-plugin-jsx/issues/525)
               $stable: true,
             }}
-            model={props.model}
+            model={model}
             options={options}
-            {...{
-              labelWidth,
-              labelSuffix,
-              labelPosition,
-              disabled,
-            }}
+            {...formProps}
           />
         </EfeDialog>
       )
