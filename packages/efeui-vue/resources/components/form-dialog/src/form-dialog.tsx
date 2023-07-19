@@ -99,6 +99,7 @@ const FormDialog = defineComponent({
             ref={$formRef}
             v-slots={{
               ...restFormSlots,
+              // ! (https://zhuanlan.zhihu.com/p/150732926)
               // ! [添加slotStable选项配置优化子组件的更新](https://github.com/vuejs/babel-plugin-jsx/issues/525)
               $stable: true,
             }}

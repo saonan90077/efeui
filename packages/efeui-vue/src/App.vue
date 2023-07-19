@@ -39,11 +39,59 @@
       <template #inputRange-tooltip>qaq</template>
       <template #inputRange-extra>qaq</template>
     </EfeFormDialog>
+    <EfeCountup ref="EfeCountupRef" :end-val="endVal">
+      <template #prefix>
+        {{ visible }}
+      </template>
+      <template #suffix>
+        {{ visible }}
+      </template>
+    </EfeCountup>
+    <ElButton @click="endVal += 100">change-end-val</ElButton>
+    <ElTooltip
+      :disabled="tooltipShow"
+      content="🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉文本这是一段很长的额文本这是一段很长的额文本这是一段很长的额文本">
+      <EfeEllipsis
+        ref="EfeEllipsisRef"
+        content="🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉文本这是一段很长的额文本这是一段很长的额文本这是一段很长的额文本">
+      </EfeEllipsis>
+    </ElTooltip>
+    <EfeTagPlus>自定义组标题</EfeTagPlus>
+    <EfeTable
+      :model="tableModel"
+      :data="tableData"
+      :columns="tableColumns"
+      :default-sort="{
+        prop: 'name',
+        order: 'descending',
+      }">
+      <template #slot>
+        <ElTableColumn label="slot" prop="slot">
+          <template #default="{ row }">
+            <ElInput v-model="row.slot" />
+          </template>
+        </ElTableColumn>
+      </template>
+      <template #childslot>
+        <ElTableColumn label="childslot" prop="childslot">
+          <template #default> childslot </template>
+        </ElTableColumn>
+      </template>
+    </EfeTable>
+    {{ tableModel }}
+    {{ tableData }}
   </ElConfigProvider>
 </template>
 
 <script lang="ts" setup>
-  import { ElConfigProvider, ElFormItem, ElInput, ElButton } from 'element-plus'
+  import {
+    ElConfigProvider,
+    ElFormItem,
+    ElInput,
+    ElButton,
+    ElTooltip,
+    ElTableColumn,
+  } from 'element-plus'
   import {
     EfeCheckbox,
     EfeSelect,
@@ -54,6 +102,12 @@
     EfeDialog,
     EfeFormDialog,
     FormDialogProps,
+    EfeCountup,
+    CountupExpose,
+    EfeEllipsis,
+    EllipsisExpose,
+    EfeTagPlus,
+    EfeTable,
   } from '../resources/components'
   import {
     computed,
@@ -68,11 +122,147 @@
   } from 'vue'
   import { useToggle } from '@vueuse/core'
 
-  const checkboxValue = ref()
+  const tableModel = reactive<any>({
+    selections: [],
+    filterData: {
+      filterInput: 'qazq',
+      filterdate: ['2000-10-10', '2023-11-11'],
+    },
+    sortData: {},
+  })
+  const tableData = ref([
+    {
+      date: '',
+      name: 0,
+      address: 'No. 189, Grove St, Los Angeles',
+      dict: 0,
+      enable: true,
+    },
+    {
+      date: Date.now(),
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+      dict: 1,
+      enable: true,
+    },
+    {
+      date: Date.now(),
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+      dict: 2,
+      enable: true,
+    },
+    {
+      date: Date.now(),
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+      dict: 3,
+      enable: true,
+    },
+    {
+      date: Date.now(),
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+      enable: true,
+    },
+  ])
 
-  const [show, toggleShow] = useToggle(true)
+  const select1Options = ref<any[]>([])
+  const select2Options = ref<any[]>([])
+  const select3Options = ref<any[]>([])
+  const tableColumns = computed(() => [
+    {
+      type: 'filter',
+      label: '下拉1',
+      field: 'select1',
+      extraProps: {
+        filterProps: {
+          inputType: 'select',
+          options: select1Options.value,
+        },
+      },
+    },
+    {
+      type: 'filter',
+      label: '下拉2',
+      field: 'select2',
+      extraProps: {
+        filterProps: {
+          inputType: 'select',
+          options: select2Options.value,
+        },
+      },
+    },
+    {
+      type: 'filter',
+      label: '下拉3',
+      field: 'select3',
+      extraProps: {
+        filterProps: {
+          inputType: 'select',
+          options: select3Options.value,
+        },
+      },
+    },
+    {
+      type: 'operate',
+      label: 'Operate',
+      field: 'operate',
+      extraProps: {
+        operateProps: {
+          // filterBtnsProps: {},
+          btns: [
+            {
+              label: '编辑',
+              type: 'primary',
+              handler: () => {
+                console.log('编辑')
+              },
+            },
+            {
+              label: '删除',
+              type: 'danger',
+              handler: () => {
+                console.log('删除')
+              },
+            },
+            {
+              label: '禁用',
+              type: 'danger',
+              show: ({ row }: any) => row.enable,
+              handler: ({ row }: any) => {
+                console.log('禁用')
+                row.enable = !row.enable
+              },
+            },
+            {
+              label: '启用',
+              type: 'danger',
+              show: ({ row }: any) => !row.enable,
+              handler: ({ row }: any) => {
+                console.log('启用')
+                row.enable = !row.enable
+              },
+            },
+          ],
+        },
+      },
+    },
+  ])
+
+  const checkboxValue = ref()
+  const EfeCountupRef = ref<CountupExpose>()
+  const EfeEllipsisRef = shallowRef<EllipsisExpose>()
+
+  const endVal = ref(0)
+
+  const [show, toggleShow] = useToggle(false)
   const [visible, toggleVisible] = useToggle(false)
   const [visible1, toggleVisible1] = useToggle(false)
+
+  const tooltipShow = computed(() => {
+    return !EfeEllipsisRef.value?.exceeded
+  })
 
   const handleSubmit: FormDialogProps['onSubmit'] = async (
     setOkButtonLoading,
@@ -194,21 +384,40 @@
 
   onMounted(() => {
     setTimeout(() => {
-      // formValue.input = 'qaq'
-      // options.value = [
-      //   {
-      //     label: '选项1',
-      //     value: 1,
-      //   },
-      //   {
-      //     label: '选项2',
-      //     value: 2,
-      //   },
-      //   {
-      //     label: '选项3',
-      //     value: 3,
-      //   },
-      // ]
+      select1Options.value = [
+        {
+          label: '选项1',
+          value: 1,
+        },
+      ]
     }, 300)
+    setTimeout(() => {
+      select2Options.value = [
+        {
+          label: '选项1',
+          value: 1,
+        },
+        {
+          label: '选项2',
+          value: 2,
+        },
+      ]
+    }, 300)
+    setTimeout(() => {
+      select3Options.value = [
+        {
+          label: '选项1',
+          value: 1,
+        },
+        {
+          label: '选项2',
+          value: 2,
+        },
+        {
+          label: '选项3',
+          value: 3,
+        },
+      ]
+    }, 400)
   })
 </script>

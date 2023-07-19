@@ -1,0 +1,26 @@
+.efe-table {
+  &.el-table--border {
+    .filter-input {
+      border-top: var(--el-table-border);
+    }
+  }
+  .table-column-filter-th {
+    padding: 0;
+    .cell {
+      padding: 0;
+    }
+    .filter-header,
+    .filter-input {
+      padding: 8px 12px;
+    }
+    .filter-input {
+      display: flex;
+      & > div {
+        flex: 1;
+      }
+    }
+    .filter-input + .caret-wrapper {
+      display: none;
+    }
+  }
+}

@@ -31,6 +31,9 @@ export default defineConfig(() => {
           'element-plus',
           '@element-plus/icons-vue',
           '@vueuse/core',
+          'countup.js',
+          'runes2',
+          'dayjs',
         ],
         output: [
           {
@@ -41,6 +44,9 @@ export default defineConfig(() => {
               'element-plus': 'ElementPlus',
               '@element-plus/icons-vue': 'ElementPlusIconsVue',
               '@vueuse/core': 'VueUse',
+              'countup.js': 'CountUp',
+              runes2: 'runes2',
+              dayjs: 'dayjs',
             },
             entryFileNames: '[name].js',
             assetFileNames: 'style/[name].[ext]',
@@ -61,7 +67,6 @@ export default defineConfig(() => {
       lib: {
         entry: libEntrys,
       },
-      minify: false,
     },
   }
 })

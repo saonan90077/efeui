@@ -16,6 +16,9 @@ export default defineConfig(() => {
           'element-plus',
           '@element-plus/icons-vue',
           '@vueuse/core',
+          'countup.js',
+          'runes2',
+          'dayjs',
         ],
         output: {
           globals: {
@@ -23,6 +26,9 @@ export default defineConfig(() => {
             'element-plus': 'ElementPlus',
             '@element-plus/icons-vue': 'ElementPlusIconsVue',
             '@vueuse/core': 'VueUse',
+            'countup.js': 'CountUp',
+            runes2: 'runes2',
+            dayjs: 'dayjs',
           },
           exports: 'named',
         },

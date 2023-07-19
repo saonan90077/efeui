@@ -2,6 +2,7 @@ import { App } from 'vue'
 import component from './component'
 
 export * from './components'
+export * from './directives'
 export * from './utils'
 
 const installer = {

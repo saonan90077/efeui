@@ -1,0 +1,43 @@
+@keyframes efe-tag-plus__dot--ani {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+.efe-tag-plus {
+  &--dot {
+    .el-tag__content {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 5px;
+    position: relative;
+    background-color: currentColor;
+    &::before {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: currentColor;
+    }
+    &::before {
+      animation: efe-tag-plus__dot--ani 1.5s ease-in-out infinite;
+    }
+    &::before {
+      opacity: 0.2;
+    }
+  }
+}

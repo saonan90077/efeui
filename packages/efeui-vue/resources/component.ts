@@ -6,6 +6,10 @@ import {
   EfeInputRange,
   EfeDialog,
   EfeFormDialog,
+  EfeCountup,
+  EfeEllipsis,
+  EfeTagPlus,
+  EfeTable,
 } from './components'
 
 export default [
@@ -16,4 +20,8 @@ export default [
   EfeInputRange,
   EfeDialog,
   EfeFormDialog,
+  EfeCountup,
+  EfeEllipsis,
+  EfeTagPlus,
+  EfeTable,
 ]
