@@ -1,38 +1,46 @@
-import { defineComponent } from 'vue'
+import { defineComponent, type SlotsType } from 'vue'
+
 import { ElSelect, ElOption } from 'element-plus'
+
 import { useVModel } from '@vueuse/core'
-import { selectProps, SelectSlots } from './select-types'
+
+import { selectProps, type SelectDropdownOption } from './select-types'
 
 const Select = defineComponent({
   name: 'efe-select',
+  inheritAttrs: false,
   props: selectProps,
-  slots: Object as SelectSlots,
+  slots: Object as SlotsType<{
+    'opt-temp'?: { option: SelectDropdownOption; optionIndex: number }
+  }>,
   emits: ['update:modelValue'],
   setup(props, { emit, attrs, slots }) {
     const modelValue = useVModel(props, 'modelValue', emit)
 
-    const renderChildren = () => {
+    const renderOption = () => {
       const { options, valueKey, labelKey } = props
 
-      return options?.map((opt, optIndex) => (
+      const _options = typeof options === 'function' ? options() : options
+
+      return _options?.map((opt, optIndex) => (
         <ElOption
           key={opt[valueKey]}
           label={opt[labelKey]}
           value={opt[valueKey]}
           disabled={opt.disabled}>
-          {slots['opt-temp']?.({ option: opt, optionIndex: optIndex }) ??
-            opt[labelKey]}
+          {slots['opt-temp']
+            ? slots['opt-temp']({ option: opt, optionIndex: optIndex })
+            : opt[labelKey]}
         </ElOption>
       ))
     }
 
     return () => {
       console.log('render: ', 'efe-select')
-      const children = renderChildren()
 
       return (
         <ElSelect v-model={modelValue.value} {...attrs}>
-          {children}
+          {renderOption()}
         </ElSelect>
       )
     }

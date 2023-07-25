@@ -1,25 +1,34 @@
-import { SlotsType, defineComponent } from 'vue'
+import { defineComponent, type SlotsType } from 'vue'
+
 import { ElTag } from 'element-plus'
+
 import { tagPlusProps } from './tag-plus-types'
 
 import './tag-plus.scss'
 
 const TagPlus = defineComponent({
   name: 'efe-tag-plus',
+  inheritAttrs: false,
   props: tagPlusProps,
   slots: Object as SlotsType<{
-    default: any
+    default?: any
   }>,
   setup(props, { attrs, slots }) {
+    const renderDot = () => {
+      const { isDot } = props
+      if (!isDot) {
+        return null
+      }
+      return <span class="efe-tag-plus__dot"></span>
+    }
     return () => {
       console.log('render: ', 'efe-tag-plus')
-      const isDot = props.isDot
 
       return (
         <ElTag
-          class={['efe-tag-plus', isDot && 'efe-tag-plus--dot']}
+          class={['efe-tag-plus', props.isDot && 'efe-tag-plus--dot']}
           {...attrs}>
-          {isDot && <span class="efe-tag-plus__dot"></span>}
+          {renderDot()}
           {slots.default?.()}
         </ElTag>
       )

@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType, SlotsType } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 
 export interface SelectDropdownOption {
   label?: string | number
@@ -10,7 +10,9 @@ export interface SelectDropdownOption {
 export const selectProps = {
   modelValue: null,
   options: {
-    type: Array as PropType<SelectDropdownOption[]>,
+    type: [Array, Function] as PropType<
+      SelectDropdownOption[] | (() => SelectDropdownOption[])
+    >,
   },
   labelKey: {
     type: String,
@@ -23,7 +25,3 @@ export const selectProps = {
 }
 
 export type SelectProps = ExtractPropTypes<typeof selectProps>
-
-export type SelectSlots = SlotsType<{
-  'opt-temp': { option: SelectDropdownOption; optionIndex: number }
-}>

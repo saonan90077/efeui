@@ -1,9 +1,18 @@
-import { SlotsType, computed, defineComponent, provide, ref } from 'vue'
+import { defineComponent, provide, ref, toRef, type SlotsType } from 'vue'
+
 import { ElEmpty, ElTable, ElTableColumn } from 'element-plus'
-import { valueFormat, dateHelper, dictionaryFormat } from '../../../utils'
-import { tableProps, TableColumnProps, tableInject } from './table-types'
+
 import TableColumnFilter from './table-column-filter'
+
 import TableColumnOperate from './table-column-operate'
+
+import { valueFormat, dateHelper, dictionaryFormat } from '../../../utils'
+
+import {
+  tableProps,
+  tableContextKey,
+  type TableColumnProps,
+} from './table-types'
 
 import './table.scss'
 
@@ -18,10 +27,12 @@ const Table = defineComponent({
     [field: string]: any
   }>,
   setup(props, { attrs, slots, emit, expose }) {
-    const model = computed(() => props.model)
+    const filterData = toRef(props.model, 'filterData')
+    const sortData = toRef(props.model, 'sortData')
+    const selections = toRef(props.model, 'selections')
 
-    provide(tableInject, {
-      model,
+    provide(tableContextKey, {
+      filterData,
     })
 
     const $tableRef = ref<InstanceType<typeof ElTable>>()
@@ -30,103 +41,112 @@ const Table = defineComponent({
       $tableRef,
     })
 
-    const handleSelectionChange = (selections: any[]) => {
-      model.value.selections = selections
+    const handleSelectionChange = (params: any[]) => {
+      selections.value = params
     }
     const handleSortChange = ({ prop, order }: any) => {
-      model.value.sortData!.prop = prop
-      model.value.sortData!.order = order
+      sortData.value = {
+        prop,
+        order,
+      }
+    }
+
+    const renderEmpty = () => {
+      if (slots.empty) {
+        return slots.empty()
+      }
+      return <ElEmpty description="暂无数据~" />
     }
 
     const isColumnVisible = (column: TableColumnProps) => {
       return typeof column.show === 'function' ? column.show?.() : column.show
     }
 
+    const renderColumnDefaultSlot = (column: TableColumnProps, scope: any) => {
+      const { type, field, extraProps = {} } = column
+      const { children, dateProps, dictionaryProps } = extraProps
+      if (children?.length) {
+        return renderChildren(children)
+      }
+      if (type === 'default') {
+        return valueFormat(scope.row[field], {
+          placeholder: '-',
+        })
+      }
+      if (type === 'date') {
+        return dateHelper.format(scope.row[field], dateProps)
+      }
+      if (type === 'dictionary') {
+        return dictionaryFormat(scope.row[field], dictionaryProps)
+      }
+    }
+
+    const renderColumn = (column: TableColumnProps) => {
+      const { type, label, field, extraProps = {} } = column
+      const { dateProps, filterProps, operateProps, ...restTableColumnProps } =
+        extraProps
+
+      if (isColumnVisible(column) === false) {
+        return null
+      }
+
+      return (
+        <>
+          {type === 'slot' && slots[field]?.()}
+          {type === 'default' && (
+            <ElTableColumn
+              label={label}
+              prop={field}
+              v-slots={{
+                default: renderColumnDefaultSlot,
+              }}
+              {...restTableColumnProps}
+            />
+          )}
+          {type === 'date' && (
+            <ElTableColumn
+              label={label}
+              prop={field}
+              v-slots={{
+                default: renderColumnDefaultSlot,
+              }}
+              {...restTableColumnProps}
+            />
+          )}
+          {type === 'dictionary' && (
+            <ElTableColumn
+              label={label}
+              prop={field}
+              v-slots={{
+                default: renderColumnDefaultSlot,
+              }}
+              {...restTableColumnProps}
+            />
+          )}
+          {type === 'filter' && (
+            <TableColumnFilter
+              label={label}
+              field={field}
+              dateProps={dateProps}
+              filterProps={filterProps}
+              {...restTableColumnProps}
+            />
+          )}
+          {type === 'operate' && (
+            <TableColumnOperate
+              label={label}
+              field={field}
+              operateProps={operateProps}
+              onFilterOperate={(eventName) => emit('filterOperate', eventName)}
+              {...restTableColumnProps}
+            />
+          )}
+        </>
+      )
+    }
+
     const renderChildren = (columns?: TableColumnProps[]) => {
-      return columns?.map((item) => {
-        const { type, label, field, extraProps = {} } = item
-        const {
-          children,
-          dateProps,
-          dictionaryProps,
-          filterProps,
-          operateProps,
-          ...restTableColumnProps
-        } = extraProps
-        return isColumnVisible(item) !== false ? (
-          <>
-            {type === 'slot' && slots[field]?.()}
-            {type === 'default' && (
-              <ElTableColumn
-                label={label}
-                prop={field}
-                v-slots={{
-                  default: (scope: any) => (
-                    <>
-                      {children?.length
-                        ? renderChildren(children)
-                        : valueFormat(scope.row[field])}
-                    </>
-                  ),
-                }}
-                {...restTableColumnProps}
-              />
-            )}
-            {type === 'date' && (
-              <ElTableColumn
-                label={label}
-                prop={field}
-                v-slots={{
-                  default: (scope: any) => (
-                    <>
-                      {children?.length
-                        ? renderChildren(children)
-                        : dateHelper.format(scope.row[field], dateProps)}
-                    </>
-                  ),
-                }}
-                {...restTableColumnProps}
-              />
-            )}
-            {type === 'dictionary' && (
-              <ElTableColumn
-                label={label}
-                prop={field}
-                v-slots={{
-                  default: (scope: any) => (
-                    <>
-                      {children?.length
-                        ? renderChildren(children)
-                        : dictionaryFormat(scope.row[field], dictionaryProps)}
-                    </>
-                  ),
-                }}
-                {...restTableColumnProps}
-              />
-            )}
-            {type === 'filter' && (
-              <TableColumnFilter
-                label={label}
-                field={field}
-                dateProps={dateProps}
-                filterProps={filterProps}
-                {...restTableColumnProps}
-              />
-            )}
-            {type === 'operate' && (
-              <TableColumnOperate
-                label={label}
-                field={field}
-                operateProps={operateProps}
-                onFilterOperate={(eventName) =>
-                  emit('filterOperate', eventName)
-                }
-                {...restTableColumnProps}
-              />
-            )}
-          </>
-        ) : null
-      })
+      return columns?.map((item) => renderColumn(item))
     }
 
     return () => {
@@ -140,7 +160,6 @@ const Table = defineComponent({
         index,
         indexMethod,
       } = props
-      const children = renderChildren(columns)
 
       return (
         <ElTable
@@ -151,7 +170,7 @@ const Table = defineComponent({
           onSort-change={handleSortChange}
           v-slots={{
             append: slots.append,
-            empty: slots.empty || (() => <ElEmpty description="暂无数据~" />),
+            empty: renderEmpty,
           }}
           {...attrs}>
           {selection ? (
@@ -170,7 +189,7 @@ const Table = defineComponent({
               index={indexMethod}
             />
           ) : null}
-          {children}
+          {renderChildren(columns)}
         </ElTable>
       )
     }

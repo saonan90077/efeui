@@ -10,6 +10,8 @@ import {
   EfeEllipsis,
   EfeTagPlus,
   EfeTable,
+  EfePageTable,
+  EfePageView,
 } from './components'
 
 export default [
@@ -24,4 +26,6 @@ export default [
   EfeEllipsis,
   EfeTagPlus,
   EfeTable,
+  EfePageTable,
+  EfePageView,
 ]

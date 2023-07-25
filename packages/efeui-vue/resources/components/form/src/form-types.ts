@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType, InjectionKey, ComputedRef } from 'vue'
+import type { ExtractPropTypes, PropType, InjectionKey, Ref } from 'vue'
 import type { FormItemRule, ElForm } from 'element-plus'
 
 export type FormItemType =
@@ -18,23 +18,24 @@ export type FormItemType =
   | 'cascader'
   | 'treeSelect'
 
-export interface FormItemExtraProps {
-  colConf?: Record<string, any>
-  extra?: string
-  tooltip?: string
-  rules?: FormItemRule[]
-  [propName: string]: any
-}
-
 export interface FormItemInputProps {
   labelKey?: string
   valueKey?: string
-  options?: Record<string, any>[]
+  options?: Record<string, any>[] | (() => Record<string, any>[])
   mode?: 'default' | 'button'
   decimal?: number
   placeholders?: string[]
   limit?: number
   valueType?: 'text' | 'int' | 'float'
+  [propName: string]: any
+}
+
+export interface FormItemExtraProps {
+  colConf?: Record<string, any>
+  extra?: string
+  tooltip?: string
+  rules?: FormItemRule[] | (() => FormItemRule[])
+  inputProps?: FormItemInputProps
   [propName: string]: any
 }
 
@@ -49,18 +50,15 @@ export const formItemProps = {
   },
   field: {
     type: String,
-    default: 'field',
+    default: '',
     required: true,
   },
   extraProps: {
     type: Object as PropType<FormItemExtraProps>,
   },
-  inputProps: {
-    type: Object as PropType<FormItemInputProps>,
-  },
   show: {
-    type: Boolean,
-    default: true,
+    type: [Boolean, Function] as PropType<boolean | (() => boolean)>,
+    default: undefined,
   },
 }
 
@@ -76,7 +74,6 @@ export interface FormOption {
 export const formProps = {
   model: {
     type: Object as PropType<Record<string, any>>,
-    default: () => ({}),
     required: true,
   },
   options: {
@@ -90,6 +87,6 @@ export interface FormExpose {
   $formRef: InstanceType<typeof ElForm>
 }
 
-export const formInject = Symbol('formInject') as InjectionKey<
-  Record<string, ComputedRef<Record<string, any>>>
+export const formContextKey = Symbol('formContextKey') as InjectionKey<
+  Record<string, Ref<Record<string, any> | undefined>>
 >

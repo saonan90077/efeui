@@ -1,4 +1,4 @@
-import { defineComponent, inject, PropType, withModifiers } from 'vue'
+import { defineComponent, inject, withModifiers, type PropType } from 'vue'
 import {
   ElCascader,
   ElDatePicker,
@@ -6,13 +6,18 @@ import {
   ElTableColumn,
   ElTreeSelect,
 } from 'element-plus'
+
 import { Search } from '@element-plus/icons-vue'
-import { TableColumnExtraProps, tableInject } from './table-types'
-import EfeSelect from '../../select'
+
+import { EfeSelect } from '../../select'
+
 import { dateHelper, dictionaryFormat, valueFormat } from '../../../utils'
+
+import { tableContextKey, type TableColumnExtraProps } from './table-types'
 
 const TableColumnFilter = defineComponent({
   name: 'table-column-filter',
+  inheritAttrs: false,
   props: {
     label: {
       type: String,
@@ -30,103 +35,122 @@ const TableColumnFilter = defineComponent({
     },
   },
   setup(props, { attrs }) {
-    const { model } = inject(tableInject)!
+    const tableContext = inject(tableContextKey, {})
 
-    return () => {
-      console.log('render: ', 'table-column-filter')
-      const { label, field, filterProps = {}, dateProps } = props
-      const { sortable, ...restAttrs } = attrs as any
+    const renderHeader = () => {
+      const { label, field, filterProps = {} } = props
       const {
         inputType = 'input',
         labelKey,
         valueKey,
         options,
-        columnType = 'default',
         ...restInputProps
       } = filterProps
+
+      if (!tableContext.filterData.value) {
+        return null
+      }
+
+      return (
+        <>
+          <div class="filter-header">
+            {label}
+            {attrs.sortable ? (
+              <span class="caret-wrapper">
+                <i class="sort-caret ascending"></i>
+                <i class="sort-caret descending"></i>
+              </span>
+            ) : null}
+          </div>
+          <div
+            class="filter-input"
+            onClick={withModifiers(() => ({}), ['stop'])}>
+            {inputType === 'input' && (
+              <ElInput
+                v-model={tableContext.filterData.value[field]}
+                suffixIcon={Search}
+                {...restInputProps}
+              />
+            )}
+            {inputType === 'select' && (
+              <EfeSelect
+                v-model={tableContext.filterData.value[field]}
+                labelKey={labelKey}
+                valueKey={valueKey}
+                options={options}
+                {...{
+                  filterable: true,
+                  clearable: true,
+                  ...restInputProps,
+                }}
+              />
+            )}
+            {inputType === 'date' && (
+              <ElDatePicker
+                v-model={tableContext.filterData.value[field]}
+                valueFormat="YYYY-MM-DD"
+                {...restInputProps}
+              />
+            )}
+            {inputType === 'cascader' && (
+              <ElCascader
+                v-model={tableContext.filterData.value[field]}
+                filterable={true}
+                clearable={true}
+                {...restInputProps}
+              />
+            )}
+            {inputType === 'treeSelect' && (
+              <ElTreeSelect
+                v-model={tableContext.filterData.value[field]}
+                filterable={true}
+                clearable={true}
+                {...restInputProps}
+              />
+            )}
+          </div>
+        </>
+      )
+    }
+
+    const renderDefault = (scope: any) => {
+      const { field, filterProps = {}, dateProps } = props
+      const {
+        labelKey,
+        valueKey,
+        options,
+        columnType = 'default',
+      } = filterProps
+
+      return (
+        <>
+          {columnType === 'default' && valueFormat(scope.row[field])}
+          {columnType === 'date' &&
+            dateHelper.format(scope.row[field], dateProps)}
+          {columnType === 'dictionary' &&
+            dictionaryFormat(scope.row[field], {
+              labelKey,
+              valueKey,
+              options,
+            })}
+        </>
+      )
+    }
+
+    return () => {
+      console.log('render: ', 'table-column-filter')
+      const { label, field } = props
 
       return (
         <ElTableColumn
           label={label}
           prop={field}
-          sortable={sortable}
           labelClassName="table-column-filter-th"
           v-slots={{
-            header: () => (
-              <>
-                <div class="filter-header">
-                  {label}
-                  {sortable && (
-                    <span class="caret-wrapper">
-                      <i class="sort-caret ascending"></i>
-                      <i class="sort-caret descending"></i>
-                    </span>
-                  )}
-                </div>
-                <div
-                  class="filter-input"
-                  onClick={withModifiers(() => ({}), ['stop'])}>
-                  {inputType === 'input' && (
-                    <ElInput
-                      v-model={model.value.filterData![field]}
-                      suffixIcon={Search}
-                      {...restInputProps}
-                    />
-                  )}
-                  {inputType === 'select' && (
-                    <EfeSelect
-                      v-model={model.value.filterData![field]}
-                      labelKey={labelKey}
-                      valueKey={valueKey}
-                      options={options}
-                      {...{
-                        filterable: true,
-                        clearable: true,
-                        ...restInputProps,
-                      }}
-                    />
-                  )}
-                  {inputType === 'date' && (
-                    <ElDatePicker
-                      v-model={model.value.filterData![field]}
-                      valueFormat="YYYY-MM-DD"
-                      {...restInputProps}
-                    />
-                  )}
-                  {inputType === 'cascader' && (
-                    <ElCascader
-                      v-model={model.value.filterData![field]}
-                      filterable={true}
-                      clearable={true}
-                      {...restInputProps}
-                    />
-                  )}
-                  {inputType === 'treeSelect' && (
-                    <ElTreeSelect
-                      v-model={model.value.filterData![field]}
-                      filterable={true}
-                      clearable={true}
-                      {...restInputProps}
-                    />
-                  )}
-                </div>
-              </>
-            ),
-            default: (scope: any) => (
-              <>
-                {columnType === 'default' && valueFormat(scope.row[field])}
-                {columnType === 'date' &&
-                  dateHelper.format(scope.row[field], dateProps)}
-                {columnType === 'dictionary' &&
-                  dictionaryFormat(scope.row[field], {
-                    labelKey,
-                    valueKey,
-                    options,
-                  })}
-              </>
-            ),
+            header: renderHeader,
+            default: renderDefault,
           }}
-          {...restAttrs}
+          {...attrs}
         />
       )
     }

@@ -1,9 +1,9 @@
 export const valueFormat = (
-  value: string | number | null | undefined,
+  value: any,
   options = {} as {
     placeholder?: string
   },
 ) => {
-  const { placeholder = '-' } = options
+  const { placeholder } = options
   return ['', undefined, null].includes(value as any) ? placeholder : value
 }

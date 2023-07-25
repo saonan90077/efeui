@@ -1,4 +1,4 @@
-import { ComputedRef, ExtractPropTypes, InjectionKey, PropType } from 'vue'
+import type { ExtractPropTypes, InjectionKey, PropType, Ref } from 'vue'
 import type { ButtonType, ElTable } from 'element-plus'
 
 export type TableColumnType =
@@ -26,13 +26,13 @@ export interface TableColumnExtraProps {
   dictionaryProps?: {
     labelKey?: string
     valueKey?: string
-    options?: Record<string, any>[]
+    options?: Record<string, any>[] | (() => Record<string, any>[])
   }
   filterProps?: {
     inputType?: 'input' | 'select' | 'date' | 'cascader' | 'treeSelect'
     labelKey?: string
     valueKey?: string
-    options?: Record<string, any>[]
+    options?: Record<string, any>[] | (() => Record<string, any>[])
     columnType?: 'default' | 'date' | 'dictionary'
     [key: string]: any
   }
@@ -55,17 +55,19 @@ export interface TableColumnProps {
 export interface TableModel {
   filterData?: Record<string, any>
   sortData?: Record<string, any>
-  selections?: any[]
+  selections?: Record<string, any>[]
 }
 
 export const tableProps = {
   model: {
     type: Object as PropType<TableModel>,
-    default: () => ({
-      filterData: {},
-      sortData: {},
-      selections: [],
-    }),
+    default: () => {
+      return {
+        filterData: {},
+        sortData: {},
+        selections: [],
+      }
+    },
   },
   data: {
     type: Array,
@@ -95,6 +97,6 @@ export type TableExpose = {
   $tableRef: InstanceType<typeof ElTable>
 }
 
-export const tableInject = Symbol('tableInject') as InjectionKey<
-  Record<'model', ComputedRef<TableModel>>
+export const tableContextKey = Symbol('tableContextKey') as InjectionKey<
+  Record<string, Ref<Record<string, any> | undefined>>
 >

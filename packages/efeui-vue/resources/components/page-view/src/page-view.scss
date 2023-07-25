@@ -1,0 +1,14 @@
+.efe-page-view {
+  &:not(.is-fluid) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  &__content {
+    padding: 10px 10px 0;
+  }
+  &__footer {
+    padding: 10px;
+    box-shadow: 0px -5px 11px 0px rgba(0, 0, 0, 0.03);
+  }
+}

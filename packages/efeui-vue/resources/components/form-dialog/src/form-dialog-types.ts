@@ -1,5 +1,5 @@
-import { ExtractPropTypes, PropType } from 'vue'
-import { FormOption } from '../../form'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { FormOption } from '../../form'
 
 export const formDialogProps = {
   modelValue: {

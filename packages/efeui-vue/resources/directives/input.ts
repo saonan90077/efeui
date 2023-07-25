@@ -1,4 +1,4 @@
-import { ObjectDirective, DirectiveBinding } from 'vue'
+import type { ObjectDirective, DirectiveBinding } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 
 const nodeList: Map<HTMLElement, { documentHandle: any }> = new Map()

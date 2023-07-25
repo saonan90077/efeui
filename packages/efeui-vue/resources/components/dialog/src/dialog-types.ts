@@ -1,4 +1,4 @@
-import { ExtractPropTypes, SlotsType } from 'vue'
+import type { ExtractPropTypes } from 'vue'
 
 export const dialogProps = {
   modelValue: {
@@ -17,10 +17,3 @@ export const dialogProps = {
 }
 
 export type DialogProps = ExtractPropTypes<typeof dialogProps>
-
-export type DialogSlots = SlotsType<{
-  header?: any
-  'title-append'?: any
-  default?: any
-  footer?: any
-}>

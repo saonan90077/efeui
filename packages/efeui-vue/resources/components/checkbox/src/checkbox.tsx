@@ -1,37 +1,43 @@
-import { defineComponent } from 'vue'
+import { defineComponent, type SlotsType } from 'vue'
+
 import { ElCheckboxGroup, ElCheckbox, ElCheckboxButton } from 'element-plus'
+
 import { useVModel } from '@vueuse/core'
-import { checkboxProps, CheckboxSlots } from './checkbox-types'
+
+import { checkboxProps, type CheckboxDropdownOption } from './checkbox-types'
 
 const Checkbox = defineComponent({
   name: 'efe-checkbox',
+  inheritAttrs: false,
   props: checkboxProps,
-  slots: Object as CheckboxSlots,
+  slots: Object as SlotsType<{
+    'opt-temp'?: { option: CheckboxDropdownOption; optionIndex: number }
+  }>,
   emits: ['update:modelValue'],
-  setup(props, { emit, attrs, slots }) {
+  setup(props, { attrs, slots, emit }) {
     const modelValue = useVModel(props, 'modelValue', emit)
 
-    const renderChildren = () => {
+    const renderOption = () => {
       const { options, mode, valueKey, labelKey } = props
-      const OptionComp = mode === 'button' ? ElCheckboxButton : ElCheckbox
-      return options?.map((opt, optIndex) => (
-        <OptionComp
+      const Option = mode === 'button' ? ElCheckboxButton : ElCheckbox
+      const _options = typeof options === 'function' ? options() : options
+      return _options?.map((opt, optIndex) => (
+        <Option
           key={opt[valueKey]}
           label={opt[valueKey]}
           disabled={opt.disabled}>
           {slots['opt-temp']?.({ option: opt, optionIndex: optIndex }) ??
             opt[labelKey]}
-        </OptionComp>
+        </Option>
       ))
     }
 
     return () => {
       console.log('render: ', 'efe-checkbox')
-      const children = renderChildren()
 
       return (
         <ElCheckboxGroup v-model={modelValue.value} {...attrs}>
-          {children}
+          {renderOption()}
         </ElCheckboxGroup>
       )
     }

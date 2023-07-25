@@ -1,0 +1,39 @@
+.efe-page-table {
+  &:not(.is-fluid) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .table-area {
+      flex: 1;
+      height: 0;
+    }
+  }
+  .conditions-form {
+    .el-row {
+      width: 100%;
+    }
+    .el-form-item__content {
+      & > div {
+        flex: 1;
+      }
+    }
+  }
+  .function-area {
+    display: flex;
+    align-items: center;
+    &__btns {
+      margin-left: auto;
+    }
+  }
+  .pagination-area {
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    &__checkbox {
+      margin: 0 12px 0 0;
+    }
+    .el-pagination {
+      margin-left: auto;
+    }
+  }
+}

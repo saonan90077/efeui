@@ -13,7 +13,9 @@ export class DateHelper {
     },
   ) {
     if (!date) {
-      return valueFormat(date)
+      return valueFormat(date, {
+        placeholder: '-',
+      })
     }
     const { format = 'YYYY-MM-DD HH:mm:ss' } = options
     return this.dayjs(date).format(format)

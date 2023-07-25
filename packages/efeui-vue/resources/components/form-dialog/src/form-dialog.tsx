@@ -1,13 +1,26 @@
-import { defineComponent, shallowRef } from 'vue'
-import { ElButton } from 'element-plus'
-import { EfeDialog } from '../../dialog'
-import { EfeForm, FormExpose } from '../../form'
-import { formDialogProps } from './form-dialog-types'
+import { defineComponent, shallowRef, type SlotsType } from 'vue'
+
 import { useToggle, useVModel } from '@vueuse/core'
+
+import { ElButton } from 'element-plus'
+
+import { EfeDialog } from '../../dialog'
+
+import { EfeForm, FormExpose } from '../../form'
+
+import { formDialogProps } from './form-dialog-types'
+import { pickSlots } from '../../../utils'
 
 const FormDialog = defineComponent({
   name: 'efe-form-dialog',
+  inheritAttrs: false,
   props: formDialogProps,
+  slots: Object as SlotsType<{
+    header?: any
+    'title-append'?: any
+    footer?: any
+    [key: string]: any
+  }>,
   emits: ['update:modelValue'],
   setup(props, { attrs, slots, emit }) {
     const modelValue = useVModel(props, 'modelValue', emit)
@@ -31,15 +44,31 @@ const FormDialog = defineComponent({
       }
     }
 
-    const titleAppendSlotKey = 'title-append'
-    const {
-      header,
-      footer,
-      [titleAppendSlotKey]: titleAppend,
-      ...restFormSlots
-    } = slots
+    const renderFooter = () => {
+      const { showCancel, showOk, cancelText, okText } = props
 
-    return () => {
+      if (slots.footer) {
+        return slots.footer()
+      }
+      return (
+        <>
+          {showCancel !== false ? (
+            <ElButton onClick={handleClose}>{cancelText}</ElButton>
+          ) : null}
+          {showOk !== false ? (
+            <ElButton
+              loading={okButtonLoading.value}
+              disabled={okButtonLoading.value}
+              type="primary"
+              onClick={handleSubmit}>
+              {okText}
+            </ElButton>
+          ) : null}
+        </>
+      )
+    }
+
+    const renderForm = () => {
       const {
         model,
         labelWidth,
@@ -47,66 +76,53 @@ const FormDialog = defineComponent({
         labelPosition,
         disabled,
         options,
-        showCancel,
-        showOk,
-        cancelText,
-        okText,
       } = props
 
-      const dialogProps = {
-        closeOnClickModal: false,
-        closeOnPressEscape: false,
-        onClosed: handleClose,
-        ...attrs,
-      }
+      const slotsKey = (options || []).reduce((resul: string[], cur) => {
+        const keys = (cur.cols || []).reduce((acc: string[], item) => {
+          const field = item.field
+          return acc.concat([
+            field,
+            `${field}-label`,
+            `${field}-tootip`,
+            `${field}-extra`,
+          ])
+        }, [])
+        return [...resul, ...keys]
+      }, [])
 
-      const formProps = {
-        labelWidth,
-        labelSuffix,
-        labelPosition,
-        disabled,
-      }
+      return (
+        <EfeForm
+          ref={$formRef}
+          v-slots={pickSlots(slots, slotsKey)}
+          model={model}
+          options={options}
+          {...{
+            labelWidth,
+            labelSuffix,
+            labelPosition,
+            disabled,
+          }}
+        />
+      )
+    }
 
-      const renderFooter = () => {
-        return (
-          <>
-            {showCancel !== false && (
-              <ElButton onClick={handleClose}>{cancelText}</ElButton>
-            )}
-            {showOk !== false && (
-              <ElButton
-                loading={okButtonLoading.value}
-                disabled={okButtonLoading.value}
-                type="primary"
-                onClick={handleSubmit}>
-                {okText}
-              </ElButton>
-            )}
-          </>
-        )
-      }
-
+    return () => {
       return (
         <EfeDialog
           v-model={modelValue.value}
           v-slots={{
-            header,
-            'title-append': titleAppend,
-            footer: footer || (showCancel || showOk ? renderFooter : null),
+            header: slots.header,
+            'title-append': slots['title-append'],
+            footer: renderFooter,
           }}
-          {...dialogProps}>
-          <EfeForm
-            ref={$formRef}
-            v-slots={{
-              ...restFormSlots,
-              // ! (https://zhuanlan.zhihu.com/p/150732926)
-              // ! [添加slotStable选项配置优化子组件的更新](https://github.com/vuejs/babel-plugin-jsx/issues/525)
-              $stable: true,
-            }}
-            model={model}
-            options={options}
-            {...formProps}
-          />
+          {...{
+            closeOnClickModal: false,
+            closeOnPressEscape: false,
+            onClosed: handleClose,
+            ...attrs,
+          }}>
+          {renderForm()}
         </EfeDialog>
       )
     }

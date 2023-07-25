@@ -1,5 +1,5 @@
-import { ExtractPropTypes, PropType, SlotsType } from 'vue'
-import { CheckboxGroupValueType } from 'element-plus'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { CheckboxGroupValueType } from 'element-plus'
 
 export interface CheckboxDropdownOption {
   label?: string | number
@@ -17,7 +17,9 @@ export const checkboxProps = {
     default: 'default',
   },
   options: {
-    type: Array as PropType<CheckboxDropdownOption[]>,
+    type: [Array, Function] as PropType<
+      CheckboxDropdownOption[] | (() => CheckboxDropdownOption[])
+    >,
   },
   labelKey: {
     type: String,
@@ -30,7 +32,3 @@ export const checkboxProps = {
 }
 
 export type CheckboxProps = ExtractPropTypes<typeof checkboxProps>
-
-export type CheckboxSlots = SlotsType<{
-  'opt-temp'?: { option: CheckboxDropdownOption; optionIndex: number }
-}>

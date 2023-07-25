@@ -1,37 +1,44 @@
-import { defineComponent } from 'vue'
+import { defineComponent, type SlotsType } from 'vue'
+
 import { ElRadioGroup, ElRadio, ElRadioButton } from 'element-plus'
+
 import { useVModel } from '@vueuse/core'
-import { radioProps, RadioSlots } from './radio-types'
+
+import { radioProps, type RadioDropdownOption } from './radio-types'
 
 const Radio = defineComponent({
   name: 'efe-radio',
+  inheritAttrs: false,
   props: radioProps,
-  slots: Object as RadioSlots,
+  slots: Object as SlotsType<{
+    'opt-temp'?: { option: RadioDropdownOption; optionIndex: number }
+  }>,
   emits: ['update:modelValue'],
-  setup(props, { emit, attrs, slots }) {
+  setup(props, { attrs, slots, emit }) {
     const modelValue = useVModel(props, 'modelValue', emit)
 
-    const renderChildren = () => {
+    const renderOption = () => {
       const { options, mode, valueKey, labelKey } = props
-      const OptionComp = mode === 'button' ? ElRadioButton : ElRadio
-      return options?.map((opt, optIndex) => (
-        <OptionComp
+      const Option = mode === 'button' ? ElRadioButton : ElRadio
+      const _options = typeof options === 'function' ? options() : options
+      return _options?.map((opt, optIndex) => (
+        <Option
           key={opt[valueKey]}
           label={opt[valueKey]}
           disabled={opt.disabled}>
-          {slots['opt-temp']?.({ option: opt, optionIndex: optIndex }) ??
-            opt[labelKey]}
-        </OptionComp>
+          {slots['opt-temp']
+            ? slots['opt-temp']({ option: opt, optionIndex: optIndex })
+            : opt[labelKey]}
+        </Option>
       ))
     }
 
     return () => {
       console.log('render: ', 'efe-radio')
-      const children = renderChildren()
 
       return (
         <ElRadioGroup v-model={modelValue.value} {...attrs}>
-          {children}
+          {renderOption()}
         </ElRadioGroup>
       )
     }

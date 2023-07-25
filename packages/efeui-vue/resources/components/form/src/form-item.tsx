@@ -1,4 +1,5 @@
-import { inject, defineComponent, SlotsType } from 'vue'
+import { inject, defineComponent, type SlotsType } from 'vue'
+
 import {
   ElCascader,
   ElCol,
@@ -12,79 +13,129 @@ import {
   ElIcon,
   ElTooltip,
 } from 'element-plus'
+
 import { QuestionFilled } from '@element-plus/icons-vue'
+
 import { EfeCheckbox } from '../../checkbox'
+
 import { EfeRadio } from '../../radio'
+
 import { EfeSelect } from '../../select'
+
 import { EfeInputRange } from '../../input-range'
-import { formInject, formItemProps } from './form-types'
+
+import { formContextKey, formItemProps } from './form-types'
+
 import { inputDirective } from '../../../directives'
+
+import { valueFormat } from '../../../utils'
 
 const FormItem = defineComponent({
   name: 'form-item',
   directives: {
     input: inputDirective,
   },
-  slots: Object as SlotsType<any>,
+  inheritAttrs: false,
   props: formItemProps,
+  slots: Object as SlotsType<{
+    [key: string]: any
+  }>,
   setup(props, { attrs, slots }) {
-    const { model } = inject(formInject, {})
+    const formContext = inject(formContextKey, null)
 
-    return () => {
-      console.log('render: ', 'form-item')
-      const { type, label, field, extraProps = {}, inputProps = {} } = props
-      const { colConf, extra, tooltip, ...restFormItemProps } = extraProps
-      Reflect.deleteProperty(restFormItemProps, 'rules')
-      const { labelKey, valueKey, options, mode, decimal, ...restInputProps } =
-        inputProps
+    const renderTooltipContent = () => {
+      const { field, extraProps = {} } = props
+      const { tooltip } = extraProps
+      if (slots[`${field}-tootip`]) {
+        return slots[`${field}-tootip`]()
+      }
+      return tooltip
+    }
 
-      const renderFormItemLabel = () => (
+    const renderLabel = () => {
+      const { label, field, extraProps = {} } = props
+      const { tooltip } = extraProps
+      return (
         <>
-          <span>{slots[`${field}-label`]?.() ?? label}</span>
+          <span>
+            {slots[`${field}-label`] ? slots[`${field}-label`]() : label}
+          </span>
           {tooltip && (
             <ElTooltip
               v-slots={{
-                content: slots[`${field}-tootip`] || (() => tooltip),
+                content: renderTooltipContent,
               }}>
               <ElIcon>
                 <QuestionFilled />
               </ElIcon>
             </ElTooltip>
           )}
-          {attrs.labelSuffix && <span>{attrs.labelSuffix}</span>}
+          {attrs.labelSuffix ? <span>{attrs.labelSuffix}</span> : null}
         </>
       )
+    }
 
+    const renderExtra = () => {
+      const { field, extraProps = {} } = props
+      const { extra } = extraProps
+      if (!extra) {
+        return null
+      }
+      return (
+        <div class="form-item__extra">
+          {slots[`${field}-extra`] ? slots[`${field}-extra`]() : extra}
+        </div>
+      )
+    }
+
+    const renderFormItem = () => {
+      const { type, label, field, extraProps = {}, show } = props
+      const {
+        colConf,
+        rules,
+        inputProps = {},
+        ...restFormItemProps
+      } = extraProps
+      const { labelKey, valueKey, options, mode, decimal, ...restInputProps } =
+        inputProps
+
+      const visible = typeof show === 'function' ? show?.() : show
+
+      if (!formContext?.model.value || visible === false) {
+        return null
+      }
       return (
         <ElCol {...colConf}>
           {type === 'slot' ? (
             slots[field]?.()
           ) : (
             <ElFormItem
-              v-slots={
-                label && {
-                  label: renderFormItemLabel,
-                }
-              }
               prop={field}
+              rules={typeof rules === 'function' ? rules?.() : rules}
+              v-slots={{
+                label: label ? renderLabel : undefined,
+              }}
               {...restFormItemProps}>
-              {type === 'show' && model.value[field]}
+              {type === 'show' &&
+                valueFormat(formContext.model.value[field], {
+                  placeholder: '-',
+                })}
               {type === 'inputRange' && (
                 <EfeInputRange
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   {...restInputProps}
                 />
               )}
               {['input', 'int', 'float'].includes(type) && (
                 <ElInput
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   v-input={[decimal, type]}
                   {...restInputProps}
                 />
               )}
               {type === 'select' && (
                 <EfeSelect
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   {...{
                     clearable: true,
                     filterable: true,
@@ -97,7 +148,7 @@ const FormItem = defineComponent({
               )}
               {type === 'checkbox' && (
                 <EfeCheckbox
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   {...{
                     labelKey,
                     valueKey,
@@ -109,7 +160,7 @@ const FormItem = defineComponent({
               )}
               {type === 'radio' && (
                 <EfeRadio
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   {...{
                     labelKey,
                     valueKey,
@@ -120,45 +171,53 @@ const FormItem = defineComponent({
                 />
               )}
               {type === 'switch' && (
-                <ElSwitch v-model={model.value[field]} {...restInputProps} />
+                <ElSwitch
+                  v-model={formContext.model.value[field]}
+                  {...restInputProps}
+                />
               )}
               {type === 'date' && (
                 <ElDatePicker
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   valueFormat="YYYY-MM-DD"
                   {...restInputProps}
                 />
               )}
               {type === 'time' && (
                 <ElTimePicker
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   {...restInputProps}
                 />
               )}
               {type === 'timeSelect' && (
                 <ElTimeSelect
-                  v-model={model.value[field]}
+                  v-model={formContext.model.value[field]}
                   {...restInputProps}
                 />
               )}
               {type === 'cascader' && (
-                <ElCascader v-model={model.value[field]} {...restInputProps} />
-              )}
-              {type === 'treeSelect' && (
-                <ElTreeSelect
-                  v-model={model.value[field]}
+                <ElCascader
+                  v-model={formContext.model.value[field]}
                   {...restInputProps}
                 />
               )}
-              {extra && (
-                <div class="form-item__extra">
-                  {slots[`${field}-extra`]?.() ?? extra}
-                </div>
+              {type === 'treeSelect' && (
+                <ElTreeSelect
+                  v-model={formContext.model.value[field]}
+                  {...restInputProps}
+                />
               )}
+              {renderExtra()}
             </ElFormItem>
           )}
         </ElCol>
       )
+    }
+
+    return () => {
+      console.log('render: ', 'form-item')
+
+      return renderFormItem()
     }
   },
 })

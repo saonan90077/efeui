@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType, SlotsType } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 
 export interface RadioDropdownOption {
   label?: string | number
@@ -16,7 +16,9 @@ export const radioProps = {
     default: 'default',
   },
   options: {
-    type: Array as PropType<RadioDropdownOption[]>,
+    type: [Array, Function] as PropType<
+      RadioDropdownOption[] | (() => RadioDropdownOption[])
+    >,
   },
   labelKey: {
     type: String,
@@ -29,7 +31,3 @@ export const radioProps = {
 }
 
 export type RadioProps = ExtractPropTypes<typeof radioProps>
-
-export type RadioSlots = SlotsType<{
-  'opt-temp': { option: RadioDropdownOption; optionIndex: number }
-}>

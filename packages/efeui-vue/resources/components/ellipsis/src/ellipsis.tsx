@@ -1,14 +1,18 @@
 import {
-  SlotsType,
   computed,
   defineComponent,
   onBeforeUnmount,
   ref,
   shallowRef,
   unref,
+  type SlotsType,
 } from 'vue'
 import runes from 'runes2'
+
 import { useResizeObserver, useToggle } from '@vueuse/core'
+
+import { debounce } from 'lodash-es'
+
 import { ellipsisProps } from './ellipsis-types'
 
 import './ellipsis.scss'
@@ -26,12 +30,13 @@ function pxToNumber(value: string | null) {
 // https://mobile.ant.design/zh/components/ellipsis/
 const Ellipsis = defineComponent({
   name: 'efe-ellipsis',
+  inheritAttrs: false,
   props: ellipsisProps,
   slots: Object as SlotsType<{
-    'expand-text': any
-    'collapse-text': any
+    'expand-text'?: any
+    'collapse-text'?: any
   }>,
-  setup(props, { slots, expose }) {
+  setup(props, { attrs, slots, expose }) {
     const rootRef = shallowRef<HTMLDivElement>()
     const expandElRef = shallowRef<HTMLAnchorElement>()
     const collapseElRef = shallowRef<HTMLAnchorElement>()
@@ -175,32 +180,44 @@ const Ellipsis = defineComponent({
       document.body.removeChild(container)
     }
 
-    const { stop } = useResizeObserver(rootRef, calcEllipsised)
+    const renderContent = () => {
+      const { leading, tailing } = unref(ellipsised)
+      const { content } = props
+      if (!unref(exceeded)) {
+        return content
+      }
+      if (unref(expanded)) {
+        return (
+          <>
+            {content}
+            {slots['collapse-text']?.()}
+          </>
+        )
+      }
+      return (
+        <>
+          {leading}
+          {slots['expand-text']?.()}
+          {tailing}
+        </>
+      )
+    }
+
+    const debounceCalcEllipsised = debounce(calcEllipsised, 250, {
+      leading: true,
+    })
+
+    const { stop } = useResizeObserver(rootRef, debounceCalcEllipsised)
     onBeforeUnmount(() => {
       stop()
     })
 
     return () => {
       console.log('render: ', 'efe-ellipsis')
-      const { content } = props
-      const { leading, tailing } = ellipsised.value
 
       return (
-        <div ref={rootRef} class="efe-ellipsis">
-          {!exceeded.value ? (
-            content
-          ) : expanded.value ? (
-            <>
-              {content}
-              {slots['collapse-text']?.()}
-            </>
-          ) : (
-            <>
-              {leading}
-              {slots['expand-text']?.()}
-              {tailing}
-            </>
-          )}
+        <div ref={rootRef} class="efe-ellipsis" {...attrs}>
+          {renderContent()}
         </div>
       )
     }

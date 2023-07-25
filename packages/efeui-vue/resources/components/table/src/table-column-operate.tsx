@@ -1,4 +1,5 @@
-import { PropType, defineComponent, h, inject } from 'vue'
+import { defineComponent, h, inject, unref, type PropType } from 'vue'
+
 import {
   ElTableColumn,
   ElButton,
@@ -9,11 +10,15 @@ import {
   ElDropdownMenu,
   ElDropdownItem,
 } from 'element-plus'
+
 import { CaretLeft, Search, Refresh, MoreFilled } from '@element-plus/icons-vue'
+
+import { cloneDeep } from 'lodash-es'
+
 import {
-  TableColumnExtraProps,
-  TableColumnOperateBtnProps,
-  tableInject,
+  tableContextKey,
+  type TableColumnExtraProps,
+  type TableColumnOperateBtnProps,
 } from './table-types'
 
 const TableColumnOperate = defineComponent({
@@ -34,17 +39,27 @@ const TableColumnOperate = defineComponent({
   },
   emits: ['filterOperate'],
   setup(props, { attrs, emit }) {
-    const { model } = inject(tableInject)!
+    const tableContext = inject(tableContextKey, {})
 
-    const initFilterData = {
-      ...model.value.filterData,
+    const initFilterData = cloneDeep(unref(tableContext.filterData))
+
+    const handleFilterSearch = () => {
+      emit('filterOperate', 'search')
+    }
+
+    const handleFilterRefresh = () => {
+      tableContext.filterData.value = cloneDeep(initFilterData)
+      emit('filterOperate', 'refresh')
     }
 
     const isButtonVisible = (btn: TableColumnOperateBtnProps, scope: any) => {
       return typeof btn.show === 'function' ? btn.show?.(scope) : btn.show
     }
 
-    const renderButton = (btn: TableColumnOperateBtnProps, scope: any) => {
+    const renderSingleButton = (
+      btn: TableColumnOperateBtnProps,
+      scope: any,
+    ) => {
       return (
         <ElButton
           link
@@ -60,32 +75,35 @@ const TableColumnOperate = defineComponent({
       )
     }
 
-    const renderChildren = (
-      scope: any,
-      list?: TableColumnOperateBtnProps[],
-    ) => {
+    const renderDropdown = (scope: any, btn: TableColumnOperateBtnProps) => {
+      return (
+        <ElDropdown
+          trigger="click"
+          v-slots={{
+            dropdown: () => (
+              <ElDropdownMenu>
+                {btn.children?.map((childBtn) =>
+                  isButtonVisible(childBtn, scope) !== false ? (
+                    <ElDropdownItem>
+                      {renderSingleButton(childBtn, scope)}
+                    </ElDropdownItem>
+                  ) : null,
+                )}
+              </ElDropdownMenu>
+            ),
+          }}>
+          <ElButton type="primary" link icon={MoreFilled} />
+        </ElDropdown>
+      )
+    }
+
+    const renderButtons = (scope: any, list?: TableColumnOperateBtnProps[]) => {
       const children = list?.map((btn) => {
-        return btn.children?.length ? (
-          <ElDropdown
-            trigger="click"
-            v-slots={{
-              dropdown: () => (
-                <ElDropdownMenu>
-                  {btn.children?.map((childBtn) =>
-                    isButtonVisible(childBtn, scope)! == false ? (
-                      <ElDropdownItem>
-                        {renderButton(childBtn, scope)}
-                      </ElDropdownItem>
-                    ) : null,
-                  )}
-                </ElDropdownMenu>
-              ),
-            }}>
-            <ElButton type="primary" link icon={MoreFilled} />
-          </ElDropdown>
-        ) : isButtonVisible(btn, scope) !== false ? (
-          renderButton(btn, scope)
-        ) : null
+        return btn.children?.length
+          ? renderDropdown(scope, btn)
+          : isButtonVisible(btn, scope) !== false
+          ? renderSingleButton(btn, scope)
+          : null
       })
 
       return (
@@ -99,21 +117,8 @@ const TableColumnOperate = defineComponent({
       )
     }
 
-    const handleFilterSearch = () => {
-      emit('filterOperate', 'search')
-    }
-    const handleFilterRefresh = () => {
-      if (model.value) {
-        model.value.filterData = {
-          ...initFilterData,
-        }
-      }
-      emit('filterOperate', 'refresh')
-    }
-
-    return () => {
-      console.log('render: ', 'table-column-operate')
-      const { label, field, operateProps = {} } = props
+    const renderDefaultSlot = (scope: any) => {
+      const { operateProps = {} } = props
       const { filterBtnsProps, btns, limit } = operateProps
       const finalBtns =
         typeof limit === 'undefined'
@@ -122,41 +127,49 @@ const TableColumnOperate = defineComponent({
               children: btns?.slice(limit),
             })
 
+      if (!filterBtnsProps) {
+        return renderButtons(scope, finalBtns)
+      }
+      return (
+        <ElTableColumn
+          align="center"
+          v-slots={{
+            header: () => (
+              <ElSpace size={8}>
+                <ElIcon color="#409EFF">
+                  <CaretLeft />
+                </ElIcon>
+                <ElButton
+                  type="primary"
+                  icon={Search}
+                  onClick={handleFilterSearch}>
+                  查询
+                </ElButton>
+                <ElButton icon={Refresh} onClick={handleFilterRefresh}>
+                  重置
+                </ElButton>
+              </ElSpace>
+            ),
+            default: (scope: any) => renderButtons(scope, finalBtns),
+          }}
+          {...attrs}
+        />
+      )
+    }
+
+    return () => {
+      console.log('render: ', 'table-column-operate')
+      const { label, field, operateProps = {} } = props
+      const { filterBtnsProps } = operateProps
+
       return (
         <ElTableColumn
           label={label}
           prop={field}
           align="center"
           v-slots={{
-            header: () => <>{label}</>,
-            default: (scope: any) =>
-              filterBtnsProps ? (
-                <ElTableColumn
-                  align="center"
-                  v-slots={{
-                    header: () => (
-                      <ElSpace size={8}>
-                        <ElIcon color="#409EFF">
-                          <CaretLeft />
-                        </ElIcon>
-                        <ElButton
-                          type="primary"
-                          icon={Search}
-                          onClick={handleFilterSearch}>
-                          查询
-                        </ElButton>
-                        <ElButton icon={Refresh} onClick={handleFilterRefresh}>
-                          重置
-                        </ElButton>
-                      </ElSpace>
-                    ),
-                    default: (scope: any) => renderChildren(scope, finalBtns),
-                  }}
-                  {...attrs}
-                />
-              ) : (
-                renderChildren(scope, finalBtns)
-              ),
+            header: () => label,
+            default: renderDefaultSlot,
           }}
           {...(filterBtnsProps ? undefined : attrs)}
         />
