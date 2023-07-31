@@ -19,7 +19,7 @@ const Countup = defineComponent({
     prefix?: any
     suffix?: any
   }>,
-  setup(props, { slots, expose }) {
+  setup(props, { slots }) {
     const countupRef = shallowRef()
     const countupInstance = shallowRef<CountUp>()
 
@@ -43,10 +43,6 @@ const Countup = defineComponent({
         return
       }
       countupInstance.value.update(props.endVal)
-    })
-
-    expose({
-      $countup: countupInstance,
     })
 
     return () => {

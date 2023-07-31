@@ -1,0 +1,31 @@
+.efe-table table {
+  overflow-x: initial;
+  border-collapse: initial;
+  margin: 0;
+  display: table;
+}
+.efe-table th {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  border: 0 none;
+}
+.efe-table tr {
+  border-top: 0 none;
+  transition: inherit;
+}
+.efe-table tr:nth-child(2n) {
+  background-color: inherit;
+}
+.efe-table td {
+  font-size: inherit;
+  border: 0 none;
+}
+.efe-page-table ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.efe-page-table .el-pager li {
+  margin-top: 0;
+  margin-bottom: 0;
+}

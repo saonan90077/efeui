@@ -22,6 +22,7 @@ export const inputRangeProps = {
   },
   decimal: {
     type: Number,
+    default: 2,
   },
   valueType: {
     type: String as PropType<'text' | 'int' | 'float'>,

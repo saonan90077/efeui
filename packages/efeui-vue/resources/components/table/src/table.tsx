@@ -6,7 +6,12 @@ import TableColumnFilter from './table-column-filter'
 
 import TableColumnOperate from './table-column-operate'
 
-import { valueFormat, dateHelper, dictionaryFormat } from '../../../utils'
+import {
+  valueFormat,
+  dateHelper,
+  dictionaryFormat,
+  omitProps,
+} from '../../../utils'
 
 import {
   tableProps,
@@ -22,6 +27,7 @@ const Table = defineComponent({
   props: tableProps,
   emits: ['filterOperate'],
   slots: Object as SlotsType<{
+    expand?: any
     append?: any
     empty?: any
     [field: string]: any
@@ -58,16 +64,9 @@ const Table = defineComponent({
       return <ElEmpty description="暂无数据~" />
     }
 
-    const isColumnVisible = (column: TableColumnProps) => {
-      return typeof column.show === 'function' ? column.show?.() : column.show
-    }
-
-    const renderColumnDefaultSlot = (column: TableColumnProps, scope: any) => {
+    const renderDefault = (column: TableColumnProps, scope: any) => {
       const { type, field, extraProps = {} } = column
-      const { children, dateProps, dictionaryProps } = extraProps
-      if (children?.length) {
-        return renderChildren(children)
-      }
+      const { dateProps, dictionaryProps } = extraProps
       if (type === 'default') {
         return valueFormat(scope.row[field], {
           placeholder: '-',
@@ -81,47 +80,47 @@ const Table = defineComponent({
       }
     }
 
+    const isColumnVisible = (column: TableColumnProps) => {
+      return typeof column.show === 'function' ? column.show?.() : column.show
+    }
+
+    const renderContent = (column: TableColumnProps) => {
+      const { extraProps = {} } = column
+      const { children = [] } = extraProps
+      return children.length
+        ? renderChildren(children)
+        : {
+            default: (scope: any) => renderDefault(column, scope),
+          }
+    }
+
     const renderColumn = (column: TableColumnProps) => {
       const { type, label, field, extraProps = {} } = column
-      const { dateProps, filterProps, operateProps, ...restTableColumnProps } =
-        extraProps
+      const { dateProps, filterProps, operateProps, ...rest } = extraProps
 
       if (isColumnVisible(column) === false) {
         return null
       }
 
+      const columnProps = omitProps(rest, ['children'])
+
       return (
         <>
           {type === 'slot' && slots[field]?.()}
           {type === 'default' && (
-            <ElTableColumn
-              label={label}
-              prop={field}
-              v-slots={{
-                default: renderColumnDefaultSlot,
-              }}
-              {...restTableColumnProps}
-            />
+            <ElTableColumn label={label} prop={field} {...columnProps}>
+              {renderContent(column)}
+            </ElTableColumn>
           )}
           {type === 'date' && (
-            <ElTableColumn
-              label={label}
-              prop={field}
-              v-slots={{
-                default: renderColumnDefaultSlot,
-              }}
-              {...restTableColumnProps}
-            />
+            <ElTableColumn label={label} prop={field} {...columnProps}>
+              {renderContent(column)}
+            </ElTableColumn>
           )}
           {type === 'dictionary' && (
-            <ElTableColumn
-              label={label}
-              prop={field}
-              v-slots={{
-                default: renderColumnDefaultSlot,
-              }}
-              {...restTableColumnProps}
-            />
+            <ElTableColumn label={label} prop={field} {...columnProps}>
+              {renderContent(column)}
+            </ElTableColumn>
           )}
           {type === 'filter' && (
             <TableColumnFilter
@@ -129,7 +128,7 @@ const Table = defineComponent({
               field={field}
               dateProps={dateProps}
               filterProps={filterProps}
-              {...restTableColumnProps}
+              {...columnProps}
             />
           )}
           {type === 'operate' && (
@@ -138,7 +137,7 @@ const Table = defineComponent({
               field={field}
               operateProps={operateProps}
               onFilterOperate={(eventName) => emit('filterOperate', eventName)}
-              {...restTableColumnProps}
+              {...columnProps}
             />
           )}
         </>
@@ -173,6 +172,7 @@ const Table = defineComponent({
             empty: renderEmpty,
           }}
           {...attrs}>
+          {slots.expand?.()}
           {selection ? (
             <ElTableColumn
               type="selection"

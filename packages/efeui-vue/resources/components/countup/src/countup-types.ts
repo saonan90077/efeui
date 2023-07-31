@@ -1,5 +1,5 @@
 import type { ExtractPropTypes, PropType } from 'vue'
-import type { CountUp, CountUpOptions } from 'countup.js'
+import type { CountUpOptions } from 'countup.js'
 
 export const countupProps = {
   endVal: {
@@ -13,7 +13,3 @@ export const countupProps = {
 }
 
 export type CountupProps = ExtractPropTypes<typeof countupProps>
-
-export interface CountupExpose {
-  $countup: CountUp
-}

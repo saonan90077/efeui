@@ -28,7 +28,7 @@ import { formContextKey, formItemProps } from './form-types'
 
 import { inputDirective } from '../../../directives'
 
-import { valueFormat } from '../../../utils'
+import { omitProps, valueFormat } from '../../../utils'
 
 const FormItem = defineComponent({
   name: 'form-item',
@@ -46,10 +46,7 @@ const FormItem = defineComponent({
     const renderTooltipContent = () => {
       const { field, extraProps = {} } = props
       const { tooltip } = extraProps
-      if (slots[`${field}-tootip`]) {
-        return slots[`${field}-tootip`]()
-      }
-      return tooltip
+      return slots[`${field}-tootip`] ? slots[`${field}-tootip`]() : tooltip
     }
 
     const renderLabel = () => {
@@ -60,7 +57,7 @@ const FormItem = defineComponent({
           <span>
             {slots[`${field}-label`] ? slots[`${field}-label`]() : label}
           </span>
-          {tooltip && (
+          {tooltip ? (
             <ElTooltip
               v-slots={{
                 content: renderTooltipContent,
@@ -69,7 +66,7 @@ const FormItem = defineComponent({
                 <QuestionFilled />
               </ElIcon>
             </ElTooltip>
-          )}
+          ) : null}
           {attrs.labelSuffix ? <span>{attrs.labelSuffix}</span> : null}
         </>
       )
@@ -105,7 +102,7 @@ const FormItem = defineComponent({
         return null
       }
       return (
-        <ElCol {...colConf}>
+        <ElCol {...(attrs as any).colConf} {...colConf}>
           {type === 'slot' ? (
             slots[field]?.()
           ) : (
@@ -115,7 +112,7 @@ const FormItem = defineComponent({
               v-slots={{
                 label: label ? renderLabel : undefined,
               }}
-              {...restFormItemProps}>
+              {...omitProps(restFormItemProps, ['extra', 'tooltip'])}>
               {type === 'show' &&
                 valueFormat(formContext.model.value[field], {
                   placeholder: '-',
@@ -123,6 +120,7 @@ const FormItem = defineComponent({
               {type === 'inputRange' && (
                 <EfeInputRange
                   v-model={formContext.model.value[field]}
+                  decimal={decimal}
                   {...restInputProps}
                 />
               )}

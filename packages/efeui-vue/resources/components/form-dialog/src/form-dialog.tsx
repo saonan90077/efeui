@@ -6,9 +6,10 @@ import { ElButton } from 'element-plus'
 
 import { EfeDialog } from '../../dialog'
 
-import { EfeForm, FormExpose } from '../../form'
+import { EfeForm, type FormExpose } from '../../form'
 
 import { formDialogProps } from './form-dialog-types'
+
 import { pickSlots } from '../../../utils'
 
 const FormDialog = defineComponent({
@@ -16,7 +17,7 @@ const FormDialog = defineComponent({
   inheritAttrs: false,
   props: formDialogProps,
   slots: Object as SlotsType<{
-    header?: any
+    header?: { titleId: string; titleClass: string; close: () => void }
     'title-append'?: any
     footer?: any
     [key: string]: any

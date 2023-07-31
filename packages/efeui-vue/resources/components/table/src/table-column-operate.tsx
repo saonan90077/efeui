@@ -49,7 +49,7 @@ const TableColumnOperate = defineComponent({
 
     const handleFilterRefresh = () => {
       tableContext.filterData.value = cloneDeep(initFilterData)
-      emit('filterOperate', 'refresh')
+      emit('filterOperate', 'reset')
     }
 
     const isButtonVisible = (btn: TableColumnOperateBtnProps, scope: any) => {
@@ -117,9 +117,10 @@ const TableColumnOperate = defineComponent({
       )
     }
 
-    const renderDefaultSlot = (scope: any) => {
-      const { operateProps = {} } = props
+    const renderContent = () => {
+      const { label, field, operateProps = {} } = props
       const { filterBtnsProps, btns, limit } = operateProps
+
       const finalBtns =
         typeof limit === 'undefined'
           ? btns
@@ -127,11 +128,10 @@ const TableColumnOperate = defineComponent({
               children: btns?.slice(limit),
             })
 
-      if (!filterBtnsProps) {
-        return renderButtons(scope, finalBtns)
-      }
-      return (
+      return filterBtnsProps ? (
         <ElTableColumn
+          label={label}
+          prop={field}
           align="center"
           v-slots={{
             header: () => (
@@ -154,25 +154,21 @@ const TableColumnOperate = defineComponent({
           }}
           {...attrs}
         />
+      ) : (
+        {
+          default: (scope: any) => renderButtons(scope, finalBtns),
+        }
       )
     }
 
     return () => {
       console.log('render: ', 'table-column-operate')
-      const { label, field, operateProps = {} } = props
-      const { filterBtnsProps } = operateProps
+      const { label, field } = props
 
       return (
-        <ElTableColumn
-          label={label}
-          prop={field}
-          align="center"
-          v-slots={{
-            header: () => label,
-            default: renderDefaultSlot,
-          }}
-          {...(filterBtnsProps ? undefined : attrs)}
-        />
+        <ElTableColumn label={label} prop={field} align="center" {...attrs}>
+          {renderContent()}
+        </ElTableColumn>
       )
     }
   },

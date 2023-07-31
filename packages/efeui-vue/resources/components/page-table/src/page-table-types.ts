@@ -35,13 +35,8 @@ export const pageTableProps = {
   labelWidth: {
     type: [Number, String],
   },
-  rowConf: {
+  conditionsLayout: {
     type: Object as PropType<Record<string, any>>,
-    default: () => {
-      return {
-        gutter: 32,
-      }
-    },
   },
   loading: {
     type: Boolean,

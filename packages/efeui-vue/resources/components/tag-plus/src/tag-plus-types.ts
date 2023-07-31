@@ -1,7 +1,7 @@
 import type { ExtractPropTypes } from 'vue'
 
 export const tagPlusProps = {
-  isDot: {
+  enableDot: {
     type: Boolean,
   },
 }

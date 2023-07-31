@@ -1,4 +1,10 @@
-import { defineComponent, inject, shallowRef, type PropType } from 'vue'
+import {
+  defineComponent,
+  inject,
+  shallowRef,
+  type PropType,
+  computed,
+} from 'vue'
 
 import { ElForm, ElRow, ElFormItem, ElButton, ElCol } from 'element-plus'
 
@@ -23,18 +29,27 @@ const ConditionsForm = defineComponent({
     labelWidth: {
       type: [Number, String],
     },
-    rowConf: {
+    layout: {
       type: Object as PropType<Record<string, any>>,
-      default: () => {
-        return {
-          gutter: 32,
-        }
-      },
     },
   },
   emits: ['conditionsFormOperate'],
   setup(props, { slots, emit }) {
     const formContext = inject(formContextKey, {})
+    const defaultLayout = {
+      row: {
+        gutter: 32,
+      },
+      col: {
+        span: 5,
+      },
+    }
+    const layout = computed(() => {
+      return {
+        ...defaultLayout,
+        ...props.layout,
+      }
+    })
 
     const formRef = shallowRef<InstanceType<typeof ElForm>>()
 
@@ -55,9 +70,7 @@ const ConditionsForm = defineComponent({
             {...{
               ...item,
               extraProps: {
-                colConf: {
-                  span: 5,
-                },
+                colConf: layout.value.col,
                 ...item.extraProps,
               },
             }}
@@ -71,7 +84,7 @@ const ConditionsForm = defineComponent({
         return null
       }
       return (
-        <ElCol span={3}>
+        <ElCol class="conditions-form-operate" {...layout.value.col}>
           <ElFormItem labelWidth={0}>
             <ElButton
               type="primary"
@@ -88,7 +101,7 @@ const ConditionsForm = defineComponent({
     }
 
     const renderForm = () => {
-      const { conditions, labelWidth, rowConf } = props
+      const { conditions, labelWidth } = props
       if (!conditions?.length) {
         return null
       }
@@ -98,7 +111,7 @@ const ConditionsForm = defineComponent({
           class="conditions-form"
           model={formContext.model.value}
           labelWidth={labelWidth}>
-          <ElRow {...rowConf}>
+          <ElRow {...layout.value.row}>
             {renderFormItem()}
             {renderButton()}
           </ElRow>

@@ -15,8 +15,8 @@ const TagPlus = defineComponent({
   }>,
   setup(props, { attrs, slots }) {
     const renderDot = () => {
-      const { isDot } = props
-      if (!isDot) {
+      const { enableDot } = props
+      if (!enableDot) {
         return null
       }
       return <span class="efe-tag-plus__dot"></span>
@@ -26,7 +26,7 @@ const TagPlus = defineComponent({
 
       return (
         <ElTag
-          class={['efe-tag-plus', props.isDot && 'efe-tag-plus--dot']}
+          class={['efe-tag-plus', props.enableDot && 'efe-tag-plus--dot']}
           {...attrs}>
           {renderDot()}
           {slots.default?.()}

@@ -4,11 +4,13 @@
       border-top: var(--el-table-border);
     }
   }
-  .table-column-filter-th {
+  .el-table__cell.table-column-filter-th {
     padding: 0;
     .cell {
       padding: 0;
     }
+  }
+  .table-column-filter-th {
     .filter-header,
     .filter-input {
       padding: 8px 12px;

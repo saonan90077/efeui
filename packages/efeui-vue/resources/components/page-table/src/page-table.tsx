@@ -19,6 +19,8 @@ import ConditionsForm from './conditions-form'
 
 import { debounce } from 'lodash-es'
 
+import { pickSlots } from '../../../utils'
+
 import { pageTableProps } from './page-table-types'
 
 import './page-table.scss'
@@ -36,6 +38,9 @@ const PageTable = defineComponent({
     'function-prepend'?: any
     btns?: any
     table?: { width: number; height: number }
+    expand?: any
+    append?: any
+    empty?: any
     bats?: any
     popup?: any
     [key: string]: any
@@ -132,7 +137,7 @@ const PageTable = defineComponent({
       )
     }
 
-    const handleConditionsFormOperate = (type: 'search' | 'reset') => {
+    const handleConditionsFormOperate = (type: 'refresh' | 'reset') => {
       emit('conditionsFormOperate', type)
       emitRefresh()
     }
@@ -150,7 +155,8 @@ const PageTable = defineComponent({
     // render conditions
     const conditionsFormSlots = getSlots('conditions')
     const renderConditions = () => {
-      const { conditions, enableConditionsAuto, labelWidth, rowConf } = props
+      const { conditions, enableConditionsAuto, labelWidth, conditionsLayout } =
+        props
       if (slots.conditions) {
         return slots.conditions()
       }
@@ -159,7 +165,7 @@ const PageTable = defineComponent({
           conditions={conditions}
           enableConditionsAuto={enableConditionsAuto}
           labelWidth={labelWidth}
-          rowConf={rowConf}
+          layout={conditionsLayout}
           onConditionsFormOperate={(eventName) =>
             handleConditionsFormOperate(eventName)
           }
@@ -169,7 +175,11 @@ const PageTable = defineComponent({
     }
 
     // render table
-    const tableColumnSlots = getSlots('column')
+    const tableSlots = {
+      ...getSlots('column'),
+      ...pickSlots(slots, ['expand', 'append', 'empty']),
+    }
+
     const $pageTableRef = shallowRef<TableExpose>()
     const tableModel = ref({
       filterData,
@@ -202,7 +212,7 @@ const PageTable = defineComponent({
           index={index}
           indexMethod={indexMethod}
           onFilterOperate={($event) => handleColumnFilterOperate($event)}
-          v-slots={tableColumnSlots}
+          v-slots={tableSlots}
           {...{
             border,
             stripe,

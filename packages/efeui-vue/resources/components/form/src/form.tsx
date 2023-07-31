@@ -59,18 +59,20 @@ const Form = defineComponent({
       )
     }
 
-    const renderFormItem = (col: FormItemProps) => {
+    const renderFormItem = (col: FormItemProps, row: FormOption) => {
+      const field = col.field
       return (
         <FormItem
-          key={col.field}
+          key={field}
           v-slots={pickSlots(slots, [
-            `${col.field}`,
-            `${col.field}-label`,
-            `${col.field}-tootip`,
-            `${col.field}-extra`,
+            `${field}`,
+            `${field}-label`,
+            `${field}-tootip`,
+            `${field}-extra`,
           ])}
           {...{
-            labelSuffix: attrs.labelSuffix,
+            labelSuffix: attrs[' label-suffix'],
+            colConf: row.colConf,
             ...col,
           }}
         />
@@ -83,7 +85,7 @@ const Form = defineComponent({
           <div class="form-group">
             {renderTitle(row)}
             <ElRow class="form-group-body" {...row.rowConf}>
-              {row.cols?.map((col) => renderFormItem(col))}
+              {row.cols?.map((col) => renderFormItem(col, row))}
             </ElRow>
           </div>
         )

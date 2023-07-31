@@ -14,7 +14,7 @@ const Dialog = defineComponent({
   inheritAttrs: false,
   props: dialogProps,
   slots: Object as SlotsType<{
-    header?: any
+    header?: { titleId: string; titleClass: string; close: () => void }
     'title-append'?: any
     default?: any
     footer?: any
@@ -23,9 +23,9 @@ const Dialog = defineComponent({
   setup(props, { attrs, slots, emit }) {
     const modelValue = useVModel(props, 'modelValue', emit)
 
-    const renderHeader = ({ titleId, titleClass }: any) => {
+    const renderHeader = ({ titleId, titleClass, close }: any) => {
       if (slots.header) {
-        return slots.header({ titleId, titleClass })
+        return slots.header({ titleId, titleClass, close })
       }
       return (
         <>
